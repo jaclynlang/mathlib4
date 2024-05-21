@@ -5,10 +5,9 @@ Authors: Scott Morrison
 -/
 import Mathlib.Algebra.Field.Opposite
 import Mathlib.Algebra.Group.Invertible.Defs
+import Mathlib.Algebra.GroupWithZero.Action.Defs
 import Mathlib.Algebra.Ring.Aut
 import Mathlib.Algebra.Ring.CompTypeclasses
-import Mathlib.Algebra.Field.Opposite
-import Mathlib.Algebra.Group.Invertible.Defs
 import Mathlib.Data.NNRat.Defs
 import Mathlib.Data.Rat.Cast.Defs
 import Mathlib.Data.SetLike.Basic

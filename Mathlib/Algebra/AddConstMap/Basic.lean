@@ -5,6 +5,7 @@ Authors: Yury Kudryashov
 -/
 import Mathlib.Algebra.Group.Action.Pi
 import Mathlib.Algebra.GroupPower.IterateHom
+import Mathlib.Algebra.GroupWithZero.Action.Pi
 import Mathlib.Algebra.Module.Defs
 import Mathlib.Algebra.Order.Archimedean
 import Mathlib.Algebra.Order.Group.Instances

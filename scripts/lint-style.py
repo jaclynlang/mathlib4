@@ -361,7 +361,7 @@ def missing_spaces_around_operators(lines, path):
                 left -= 1
                 if not new_line.endswith(" :="):
                     errors += [(ERR_MISSING_SPACE, line_nr, path)]
-                    new_line = f"{new_line[:-3]} :="
+                    new_line = f"{new_line[:-2]} :="
             if left != new_line.count(" := "):
                 errors += [(ERR_MISSING_SPACE, line_nr, path)]
                 # This replacement is approximate (e.g. doesn't handle purposeful double spaces).

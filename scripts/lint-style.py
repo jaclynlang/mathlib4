@@ -351,8 +351,10 @@ def missing_spaces_around_operators(lines, path):
         comment = ""
         idx = new_line.find("--")
         if idx >= 0:
-            comment = new_line[idx:]
-            new_line = new_line[:idx]
+            # Make sure to preserve a space before the comment.
+            if new_line[idx - 1] == " ":
+                comment = " " + new_line[idx:]
+            new_line = new_line[:idx].rstrip()
         # Handle := not surrounded by spaces.
         if ":=" in new_line:
             left = new_line.count(":=")

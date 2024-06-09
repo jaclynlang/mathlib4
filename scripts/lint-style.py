@@ -53,6 +53,8 @@ ERR_IND = 17 # second line not correctly indented
 ERR_ARR = 18 # space after "←"
 ERR_NUM_LIN = 19 # file is too large
 ERR_NSP = 20 # non-terminal simp
+ERR_MISSING_SPACE = 21 # missing spaces around colon or colon-equals
+ERR_DOUBLE_SPACE = 22 # double space (when not part of manual alignment)
 
 exceptions = []
 
@@ -335,6 +337,45 @@ def isolated_by_dot_semicolon_check(lines, path):
         newlines.append((line_nr, line))
     return errors, newlines
 
+'''Error if a colon or colon-equals is not surrounded by spaces. '''
+def missing_spaces_around_operators(lines, path):
+    errors = []
+    newlines = []
+    for line_nr, line, is_comment, in_string in annotate_strings(annotate_comments(lines)):
+        if is_comment or in_string:
+            newlines.append((line_nr, line))
+            continue
+        indent = len(line) - len(line.lstrip())
+        new_line = line.strip()
+        # Handle := not surrounded by spaces.
+        if new_line.contains(":="):
+            left = new_line.count(":=")
+            # Treat := as line ending separately.
+            if line.endswith(":="):
+                left -= 1
+                if not line.endswith(" :="):
+                    errors += [(ERR_MISSING_SPACE, line_nr, path)]
+                    new_line = f"{new_line[:-3]} :="
+            if left != new_line.count(" := "):
+                errors += [(ERR_MISSING_SPACE, line_nr, path)]
+                # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
+                new_line = new_line.replace(":=", " := ").replace("  ", " ").rstrip()
+        # Handle : which are not part of :=
+        if new_line.contains(":"):
+            left = new_line.count(":") - new_line.count(":=")
+            # Handle a line ending in a colon separately.
+            if line.endswith(":"):
+                left -= 1
+                if not line.endswith(" :"):
+                    errors += [(ERR_MISSING_SPACE, line_nr, path)]
+                    new_line = f"{new_line[:-2]} :"
+            if left != new_line.count(" : "):
+                errors += [(ERR_MISSING_SPACE, line_nr, path)]
+                # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
+                new_line = new_line.replace(":", " : ").replace("  ", " ").rstrip()
+        newlines.append((line_nr, f'{" " * indent}{new_line}\n'))
+    return errors, newlines
+
 def left_arrow_check(lines, path):
     errors = []
     newlines = []
@@ -400,6 +441,8 @@ def format_errors(errors):
             output_message(path, line_nr, "ERR_ARR", "Missing space after '←'.")
         if errno == ERR_NSP:
             output_message(path, line_nr, "ERR_NSP", "Non-terminal simp. Replace with `simp?` and use the suggested output")
+        if errno == ERR_MISSING_SPACE:
+            output_message(path, line_nr, "ERR_MISSING_SPACE", "Please put spaces around colons and colon-equals signs")
 
 def lint(path, fix=False):
     global new_exceptions
@@ -414,6 +457,7 @@ def lint(path, fix=False):
                             long_lines_check,
                             isolated_by_dot_semicolon_check,
                             set_option_check,
+                            missing_spaces_around_operators,
                             left_arrow_check,
                             nonterminal_simp_check]:
             errs, newlines = error_check(newlines, path)

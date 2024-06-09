@@ -385,12 +385,12 @@ def missing_spaces_around_operators(lines, path):
         if ":" in new_line:#
             left = new_line.count(":") - new_line.count(":=")
             # Handle a line ending in a colon separately.
+            # # TODO: need to handle ::, here and below!
             if new_line.endswith(":"):
                 left -= 1
                 if not new_line.endswith(" :"):
                     errors += [(ERR_MISSING_SPACE, line_nr, path)]
                     new_line = f"{new_line[:-1]} :"
-            # # TODO: need to handle ::!
             # if left != new_line.count(" : "):
             #     #errors += [(ERR_MISSING_SPACE, line_nr, path)]
             #     pass# This replacement is approximate (e.g. doesn't handle purposeful double spaces).

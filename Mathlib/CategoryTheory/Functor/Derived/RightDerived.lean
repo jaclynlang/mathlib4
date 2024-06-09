@@ -86,7 +86,7 @@ lemma rightDerived_fac (G : D ⥤ H) (β : F ⟶ L ⋙ G) :
   RF.descOfIsLeftKanExtension_fac α G β
 
 @[reassoc (attr := simp)]
-lemma rightDerived_fac_app (G : D ⥤ H) (β : F ⟶ L ⋙ G) (X : C):
+lemma rightDerived_fac_app (G : D ⥤ H) (β : F ⟶ L ⋙ G) (X : C) :
     α.app X ≫ (RF.rightDerivedDesc α W G β).app (L.obj X) = β.app X :=
   have := IsRightDerivedFunctor.isLeftKanExtension RF α W
   RF.descOfIsLeftKanExtension_fac_app α G β X

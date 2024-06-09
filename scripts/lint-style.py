@@ -347,6 +347,12 @@ def missing_spaces_around_operators(lines, path):
             continue
         indent = len(line) - len(line.lstrip())
         new_line = line.strip()
+        # Split off any in-line comment: heuristic, but perhaps good enough.
+        comment = ""
+        idx = new_line.find("--")
+        if idx >= 0:
+            comment = new_line[idx:]
+            new_line = new_line[:idx]
         # Handle := not surrounded by spaces.
         if ":=" in new_line:
             left = new_line.count(":=")
@@ -376,7 +382,7 @@ def missing_spaces_around_operators(lines, path):
                 errors += [(ERR_MISSING_SPACE, line_nr, path)]
                 # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
                 new_line = new_line.replace(":", " : ").replace("  ", " ").rstrip()
-        newlines.append((line_nr, f'{" " * indent}{new_line}\n'))
+        newlines.append((line_nr, f'{" " * indent}{new_line}{comment}\n'))
     return errors, newlines
 
 def left_arrow_check(lines, path):

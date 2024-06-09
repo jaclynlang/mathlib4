@@ -347,9 +347,16 @@ def missing_spaces_around_operators(lines, path):
             continue
         indent = len(line) - len(line.lstrip())
         new_line = line.strip()
-        # Split off any in-line comment: heuristic, but perhaps good enough.
+        # Split off any in-line comment or beginning /-: ignores in-line string literals,
+        # but is good enough for our purposes.
         comment = ""
+        # Idx is the index of the first of "--" and "/-" (and -1 if neither occurs).
         idx = new_line.find("--")
+        idx2 = new_line.find("/-")
+        if idx >= 0 and idx2 >= 0:
+            idx = min(idx, idx2)
+        else:
+            idx = max(idx, idx2)
         if idx >= 0:
             # Make sure to preserve the number of spaces before the comment.
             if new_line[idx - 1] == " ":

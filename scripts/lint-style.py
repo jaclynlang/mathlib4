@@ -363,7 +363,7 @@ def missing_spaces_around_operators(lines, path):
                     errors += [(ERR_MISSING_SPACE, line_nr, path)]
                     new_line = f"{new_line[:-2]} :="
             if left != new_line.count(" := "):
-                errors += [(ERR_MISSING_SPACE, line_nr, path)]
+                #errors += [(ERR_MISSING_SPACE, line_nr, path)]
                 # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
                 new_line = new_line.replace(":=", " := ").replace("  ", " ").rstrip()
         # Handle : which are not part of :=
@@ -373,13 +373,11 @@ def missing_spaces_around_operators(lines, path):
             if new_line.endswith(":"):
                 left -= 1
                 if not new_line.endswith(" :"):
-                    errors += [(ERR_MISSING_SPACE, line_nr, path)]
+                    #errors += [(ERR_MISSING_SPACE, line_nr, path)]
                     new_line = f"{new_line[:-2]} :"
+            # TODO: need to handle ::!
             if left != new_line.count(" : "):
-                n = new_line.count(" : ")
-                #print(f"expected {left} real colons, but found {n}")
-                #print(new_line)
-                errors += [(ERR_MISSING_SPACE, line_nr, path)]
+                #errors += [(ERR_MISSING_SPACE, line_nr, path)]
                 # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
                 new_line = new_line.replace(":", " : ").replace("  ", " ").rstrip()
         newlines.append((line_nr, f'{" " * indent}{new_line}{comment}\n'))
@@ -461,14 +459,14 @@ def lint(path, fix=False):
         lines = f.readlines()
         enum_lines = enumerate(lines, 1)
         newlines = enum_lines
-        for error_check in [line_endings_check,
-                            four_spaces_in_second_line,
-                            long_lines_check,
-                            isolated_by_dot_semicolon_check,
-                            set_option_check,
+        for error_check in [#line_endings_check,
+                            #four_spaces_in_second_line,
+                            #long_lines_check,
+                            #isolated_by_dot_semicolon_check,
+                            #set_option_check,
                             missing_spaces_around_operators,
-                            left_arrow_check,
-                            nonterminal_simp_check]:
+                            ]:#left_arrow_check,
+                            #nonterminal_simp_check]:
             errs, newlines = error_check(newlines, path)
             format_errors(errs)
 

@@ -354,6 +354,8 @@ def missing_spaces_around_operators(lines, path):
             # Make sure to preserve a space before the comment.
             if new_line[idx - 1] == " ":
                 comment = " " + new_line[idx:]
+            else:
+                comment = new_line[idx:]
             new_line = new_line[:idx].rstrip()
         # Handle := not surrounded by spaces.
         if ":=" in new_line:

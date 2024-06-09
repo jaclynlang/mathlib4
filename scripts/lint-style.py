@@ -366,20 +366,20 @@ def missing_spaces_around_operators(lines, path):
                 #errors += [(ERR_MISSING_SPACE, line_nr, path)]
                 # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
                 new_line = new_line.replace(":=", " := ").replace("  ", " ").rstrip()
-        # Handle : which are not part of :=
-        if ":" in new_line:#
-            left = new_line.count(":") - new_line.count(":=")
-            # Handle a line ending in a colon separately.
-            if new_line.endswith(":"):
-                left -= 1
-                if not new_line.endswith(" :"):
-                    #errors += [(ERR_MISSING_SPACE, line_nr, path)]
-                    new_line = f"{new_line[:-2]} :"
-            # TODO: need to handle ::!
-            if left != new_line.count(" : "):
-                #errors += [(ERR_MISSING_SPACE, line_nr, path)]
-                # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
-                new_line = new_line.replace(":", " : ").replace("  ", " ").rstrip()
+        # # Handle : which are not part of :=
+        # if ":" in new_line:#
+        #     left = new_line.count(":") - new_line.count(":=")
+        #     # Handle a line ending in a colon separately.
+        #     if new_line.endswith(":"):
+        #         left -= 1
+        #         if not new_line.endswith(" :"):
+        #             #errors += [(ERR_MISSING_SPACE, line_nr, path)]
+        #             #new_line = f"{new_line[:-1]} :"
+        #     # TODO: need to handle ::!
+        #     if left != new_line.count(" : "):
+        #         #errors += [(ERR_MISSING_SPACE, line_nr, path)]
+        #         pass# This replacement is approximate (e.g. doesn't handle purposeful double spaces).
+        #         #new_line = new_line.replace(":", " : ").replace("  ", " ").rstrip()
         newlines.append((line_nr, f'{" " * indent}{new_line}{comment}\n'))
     return errors, newlines
 

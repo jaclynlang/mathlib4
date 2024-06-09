@@ -348,7 +348,7 @@ def missing_spaces_around_operators(lines, path):
         indent = len(line) - len(line.lstrip())
         new_line = line.strip()
         # Handle := not surrounded by spaces.
-        if new_line.contains(":="):
+        if ":=" in new_line:
             left = new_line.count(":=")
             # Treat := as line ending separately.
             if line.endswith(":="):
@@ -361,7 +361,7 @@ def missing_spaces_around_operators(lines, path):
                 # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
                 new_line = new_line.replace(":=", " := ").replace("  ", " ").rstrip()
         # Handle : which are not part of :=
-        if new_line.contains(":"):
+        if ":" in new_line:
             left = new_line.count(":") - new_line.count(":=")
             # Handle a line ending in a colon separately.
             if line.endswith(":"):
@@ -370,6 +370,7 @@ def missing_spaces_around_operators(lines, path):
                     errors += [(ERR_MISSING_SPACE, line_nr, path)]
                     new_line = f"{new_line[:-2]} :"
             if left != new_line.count(" : "):
+                print(f"expected {left} real colons, but found {new_line.count(" ")}")
                 errors += [(ERR_MISSING_SPACE, line_nr, path)]
                 # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
                 new_line = new_line.replace(":", " : ").replace("  ", " ").rstrip()

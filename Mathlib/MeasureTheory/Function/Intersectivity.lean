@@ -60,7 +60,7 @@ lemma bergelson' {s : ℕ → Set α} (hs : ∀ n, MeasurableSet (s n)) (hr₀ :
   let f (n : ℕ) : α → ℝ≥0∞ := (↑(n + 1) : ℝ≥0∞)⁻¹ • ∑ k in Finset.range (n + 1), (s k).indicator 1
   -- We gather a few simple properties of `f`.
   have hfapp : ∀ n a, f n a = (↑(n + 1))⁻¹ * ∑ k in Finset.range (n + 1), (s k).indicator 1 a := by
-    simp only [f, Pi.coe_nat, Pi.smul_apply, Pi.inv_apply, Finset.sum_apply, eq_self_iff_true,
+    simp only [f, Pi.natCast_def, Pi.smul_apply, Pi.inv_apply, Finset.sum_apply, eq_self_iff_true,
     forall_const, imp_true_iff, smul_eq_mul]
   have hf n : Measurable (f n) := Measurable.mul' (@measurable_const ℝ≥0∞ _ _ _ (↑(n + 1))⁻¹)
       (Finset.measurable_sum' _ fun i _ ↦ measurable_one.indicator $ hs i)
@@ -102,7 +102,7 @@ lemma bergelson' {s : ℕ → Set α} (hs : ∀ n, MeasurableSet (s n)) (hr₀ :
       tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
       (h := fun n ↦ (n.succ : ℝ≥0∞)⁻¹ * hxs.toFinset.card) ?_ bot_le fun n ↦ mul_le_mul_left' ?_ _
     · simpa using ENNReal.Tendsto.mul_const (ENNReal.tendsto_inv_nat_nhds_zero.comp $
-        tendsto_add_atTop_nat 1) (.inr $ ENNReal.nat_ne_top _)
+        tendsto_add_atTop_nat 1) (.inr $ ENNReal.natCast_ne_top _)
     · classical
       simpa only [Finset.sum_apply, indicator_apply, Pi.one_apply, Finset.sum_boole, Nat.cast_le]
         using Finset.card_le_card fun m hm ↦ hxs.mem_toFinset.2 (Finset.mem_filter.1 hm).2
@@ -123,8 +123,8 @@ lemma bergelson [Infinite ι] {s : ι → Set α} (hs : ∀ i, MeasurableSet (s 
     (hr : ∀ i, r ≤ μ (s i)) :
   ∃ t : Set ι, t.Infinite ∧ ∀ ⦃u⦄, u ⊆ t → u.Finite → 0 < μ (⋂ i ∈ u, s i) := by
   obtain ⟨t, ht, h⟩ := bergelson' (fun n ↦ hs $ Infinite.natEmbedding _ n) hr₀ (fun n ↦ hr _)
-  refine ⟨_, ht.image $ (Infinite.natEmbedding _).injective.injOn _, fun u hut hu ↦
-    (h (preimage_subset_of_subset_image (Infinite.natEmbedding _).injective hut) $ hu.preimage $
-    (Embedding.injective _).injOn _).trans_le $ measure_mono $ subset_iInter₂ fun i hi ↦ ?_⟩
+  refine ⟨_, ht.image (Infinite.natEmbedding _).injective.injOn, fun u hut hu ↦
+    (h (preimage_subset_of_subset_image (Infinite.natEmbedding _).injective hut) $ hu.preimage
+    (Embedding.injective _).injOn).trans_le $ measure_mono $ subset_iInter₂ fun i hi ↦ ?_⟩
   obtain ⟨n, -, rfl⟩ := hut hi
   exact iInter₂_subset n hi

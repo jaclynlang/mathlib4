@@ -3,7 +3,6 @@ Copyright (c) 2023 Yaël Dillies. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yaël Dillies
 -/
-import Mathlib.MeasureTheory.Function.LpSpace
 import Mathlib.MeasureTheory.Integral.Average
 
 /-!
@@ -128,3 +127,4 @@ lemma bergelson [Infinite ι] {s : ι → Set α} (hs : ∀ i, MeasurableSet (s 
     (Embedding.injective _).injOn).trans_le $ measure_mono $ subset_iInter₂ fun i hi ↦ ?_⟩
   obtain ⟨n, -, rfl⟩ := hut hi
   exact iInter₂_subset n hi
+

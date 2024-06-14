@@ -348,7 +348,7 @@ and the comment itself (including the comment marker).
 def split_inline_comment(line):
     # Split off any in-line comment or beginning /-:
     # this check ignores in-line string literals, but is good enough for our purposes.
-    before = ""
+    before = line
     spaces = ""
     comment = ""
     # Idx is the index of the first of "--" and "/-" (and -1 if neither occurs).
@@ -364,9 +364,9 @@ def split_inline_comment(line):
         # Make sure to preserve the number of spaces before the comment marked.
         if before.endswith(" "):
             num_spaces = len(before) - len(before.rstrip())
-            spaces = before[:-num_spaces]
+            spaces = before[-num_spaces:]
             before = before.rstrip()
-    assert f"{before}{spaces}{comment}" == line
+    assert f"{before}{spaces}{comment}" == line, f"bug in comment splitting: input is {line}, output is ('{before}', '{spaces}', '{comment}')"
     return (before, spaces, comment)
 
 

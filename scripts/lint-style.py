@@ -340,6 +340,36 @@ def isolated_by_dot_semicolon_check(lines, path):
         newlines.append((line_nr, line))
     return errors, newlines
 
+'''Split of an inline Lean comment or beginning multi-line comment:
+return a tuple (before, spaces, comment) consisting of
+the string before the comment marked (right-trimmed), any space before the comment marked
+and the comment itself (including the comment marker).
+'''
+def split_inline_comment(line):
+    # Split off any in-line comment or beginning /-:
+    # this check ignores in-line string literals, but is good enough for our purposes.
+    before = ""
+    spaces = ""
+    comment = ""
+    # Idx is the index of the first of "--" and "/-" (and -1 if neither occurs).
+    idx = line.find("--")
+    idx2 = line.find("/-")
+    if idx >= 0 and idx2 >= 0:
+        idx = min(idx, idx2)
+    else:
+        idx = max(idx, idx2)
+    if idx >= 0:
+        comment = line[idx:]
+        before = line[:idx]
+        # Make sure to preserve the number of spaces before the comment marked.
+        if before.endswith(" "):
+            num_spaces = len(before) - len(before.rstrip())
+            spaces = before[:-num_spaces]
+            before = before.rstrip()
+    assert f"{before}{spaces}{comment}" == line
+    return (before, spaces, comment)
+
+
 '''Error if a colon or colon-equals is not surrounded by spaces. '''
 def missing_spaces_around_operators(lines, path):
     errors = []
@@ -350,55 +380,36 @@ def missing_spaces_around_operators(lines, path):
             continue
         indent = len(line) - len(line.lstrip())
         new_line = line.strip()
-        # Split off any in-line comment or beginning /-: ignores in-line string literals,
-        # but is good enough for our purposes.
-        comment = ""
-        # Idx is the index of the first of "--" and "/-" (and -1 if neither occurs).
-        idx = new_line.find("--")
-        idx2 = new_line.find("/-")
-        if idx >= 0 and idx2 >= 0:
-            idx = min(idx, idx2)
-        else:
-            idx = max(idx, idx2)
-        if idx >= 0:
-            # Make sure to preserve the number of spaces before the comment.
-            if new_line[idx - 1] == " ":
-                comment = new_line[idx:]
-                new_line = new_line[:idx]
-                spaces = len(new_line) - len(new_line.rstrip())
-                comment = f"{' ' * spaces}{comment}"
-                new_line = new_line.rstrip()
-            else:
-                comment = new_line[idx:]
-                new_line = new_line[:idx]
+        (before_comment, spaces, comment) = split_inline_comment(new_line)
+
         # Handle := not surrounded by spaces.
-        if ":=" in new_line:
-            left = new_line.count(":=")
+        if ":=" in before_comment:
+            left = before_comment.count(":=")
             # Treat := as line ending separately.
-            if new_line.endswith(":="):
+            if before_comment.endswith(":="):
                 left -= 1
-                if not new_line.endswith(" :="):
+                if not before_comment.endswith(" :="):
                     errors += [(ERR_MISSING_SPACE, line_nr, path)]
-                    new_line = f"{new_line[:-2]} :="
-            if left != new_line.count(" := "):
+                    before_comment = f"{before_comment[:-2]} :="
+            if left != before_comment.count(" := "):
                 errors += [(ERR_MISSING_SPACE, line_nr, path)]
                 # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
-                new_line = new_line.replace(":=", " := ").replace("  ", " ").rstrip()
+                before_comment = before_comment.replace(":=", " := ").replace("  ", " ").rstrip()
         # Handle : which are not part of :=
-        if ":" in new_line:#
-            left = new_line.count(":") - new_line.count(":=")
+        if ":" in before_comment:
+            left = before_comment.count(":") - before_comment.count(":=")
             # Handle a line ending in a colon separately.
             # # TODO: need to handle ::, here and below!
-            if new_line.endswith(":"):
+            if before_comment.endswith(":"):
                 left -= 1
-                if not new_line.endswith(" :"):
+                if not before_comment.endswith(" :"):
                     errors += [(ERR_MISSING_SPACE, line_nr, path)]
-                    new_line = f"{new_line[:-1]} :"
-            # if left != new_line.count(" : "):
+                    before_comment = f"{before_comment[:-1]} :"
+            # if left != before_comment.count(" : "):
             #     #errors += [(ERR_MISSING_SPACE, line_nr, path)]
             #     pass# This replacement is approximate (e.g. doesn't handle purposeful double spaces).
-            #     #new_line = new_line.replace(":", " : ").replace("  ", " ").rstrip()
-        newlines.append((line_nr, f'{" " * indent}{new_line}{comment}\n'))
+            #     #before_comment = before_comment.replace(":", " : ").replace("  ", " ").rstrip()
+        newlines.append((line_nr, f'{" " * indent}{before_comment}{spaces}{comment}\n'))
     return errors, newlines
 
 def left_arrow_check(lines, path):

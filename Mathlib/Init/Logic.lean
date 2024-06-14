@@ -362,11 +362,11 @@ theorem rec_subsingleton {p : Prop} [h : Decidable p] {h₁ : p → Sort u} {h�
   | isFalse h => h₄ h
 
 theorem imp_of_if_pos {c t e : Prop} [Decidable c] (h : ite c t e) (hc : c) : t :=
-  (if_pos hc ▸ h : )
+  (if_pos hc ▸ h :)
 #align implies_of_if_pos imp_of_if_pos
 
 theorem imp_of_if_neg {c t e : Prop} [Decidable c] (h : ite c t e) (hnc : ¬c) : e :=
-  (if_neg hnc ▸ h : )
+  (if_neg hnc ▸ h :)
 #align implies_of_if_neg imp_of_if_neg
 
 theorem if_ctx_congr {α : Sort u} {b c : Prop} [dec_b : Decidable b] [dec_c : Decidable c]

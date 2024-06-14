@@ -94,7 +94,6 @@ def mkFintype (declName : Name) : CommandElabM Bool := do
     let header ← Deriving.mkHeader `Fintype 0 indVal
     let binders' ← Deriving.mkInstImplicitBinders `Decidable indVal header.argNames
     let instCmd ← `(command|
-      instance $header.binders:bracketedBinder* $(binders'.map TSyntax.mk):bracketedBinder* :
           Fintype $header.targetType := derive_fintype% _)
     return instCmd
   trace[Elab.Deriving.fintype] "instance command:\n{cmd}"

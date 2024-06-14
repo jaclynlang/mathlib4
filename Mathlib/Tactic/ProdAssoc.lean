@@ -79,8 +79,6 @@ def ProdTree.pack (ts : List Expr) : ProdTree → MetaM Expr
     let fstSize := fst.size
     let sndSize := snd.size
     unless ts.length == fstSize + sndSize do throwError "Failed due to size mismatch."
-    let tsfst := ts.toArray[:fstSize] |>.toArray.toList
-    let tssnd := ts.toArray[fstSize:] |>.toArray.toList
     let mk : Expr := mkAppN (.const ``Prod.mk [u,v]) #[fst.getType, snd.getType]
     return .app (.app mk (← fst.pack tsfst)) (← snd.pack tssnd)
 

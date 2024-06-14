@@ -54,18 +54,15 @@ def elabLetImplDetail : TermElab := fun stx expectedType? =>
   | _ => throwUnsupportedSyntax
 
 macro_rules
-| `({ $[$srcs,* with]? $[$fields],* $[: $ty?]? }) => show MacroM Term from do
     let mut spreads := #[]
     let mut newFields := #[]
 
     for field in fields do
       match field.1 with
-        | `(structInstField| $name:ident := $arg) =>
           if name.getId.eraseMacroScopes == `__ then do
             spreads := spreads.push arg
           else
             newFields := newFields.push field
-        | `(structInstFieldAbbrev| $_:ident) =>
           newFields := newFields.push field
         | _ =>
           throwUnsupported
@@ -77,5 +74,4 @@ macro_rules
       return (mkIdent <| ← Macro.addMacroScope n, spread)
 
     let srcs := (srcs.map (·.getElems)).getD {} ++ spreadData.map Prod.fst
-    let body ← `({ $srcs,* with $[$newFields],* $[: $ty?]? })
     spreadData.foldrM (init := body) fun (id, val) body => `(let_impl_detail $id := $val; $body)

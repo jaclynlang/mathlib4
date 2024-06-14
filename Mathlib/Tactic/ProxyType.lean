@@ -107,7 +107,6 @@ def defaultMkProxyType (ctors : Array (Name × Expr × Term))
     TermElabM (Expr × Array Term × TSyntax `tactic) := do
   let mut types := #[]
   let mut patts := #[]
-  for i in [0:ctors.size] do
     let (_ctorName, ty, patt) := ctors[i]!
     types := types.push ty
     patts := patts.push <| ← wrapSumAccess i ctors.size patt
@@ -121,7 +120,6 @@ where
     | [x] => return (x, ← `(tactic| rfl))
     | x :: xs => do
       let (ty, pf) ← mkCType xs
-      let pf ← `(tactic| cases x with | inl _ => rfl | inr x => $pf:tactic)
       return (← decorateSum (← mkAppM ``Sum #[x, ty]), pf)
   /-- Navigates into the sum type that we create in `mkCType` for the given constructor index. -/
   wrapSumAccess (cidx nctors : Nat) (spatt : Term) : TermElabM Term :=

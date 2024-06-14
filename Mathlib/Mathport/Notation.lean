@@ -32,7 +32,7 @@ For example, the familiar exists is given by:
 which expands to the same expression as
 `∃ x y : Nat, x < y`
 -/
-syntax "expand_binders% " "(" ident " => " term ")" extBinders ", " term : term
+syntax "expand_binders% " "(" ident " => " term ")" extBinders ", " term:term
 
 macro_rules
   | `(expand_binders% ($x => $term) $y : extBinder, $res) =>
@@ -56,12 +56,12 @@ macro_rules
         $[$binders]*, $res)
 
 macro (name := expandFoldl) "expand_foldl% "
-  "(" x:ident ppSpace y:ident " => " term:term ") " init:term:max " [" args:term,* "]" : term =>
+  "(" x:ident ppSpace y:ident " => " term:term ") " init:term:max " [" args:term,* "]":term =>
   args.getElems.foldlM (init := init) fun res arg ↦ do
     term.replaceM fun e ↦
       return if e == x then some res else if e == y then some arg else none
 macro (name := expandFoldr) "expand_foldr% "
-  "(" x:ident ppSpace y:ident " => " term:term ") " init:term:max " [" args:term,* "]" : term =>
+  "(" x:ident ppSpace y:ident " => " term:term ") " init:term:max " [" args:term,* "]":term =>
   args.getElems.foldrM (init := init) fun arg res ↦ do
     term.replaceM fun e ↦
       return if e == x then some arg else if e == y then some res else none
@@ -528,18 +528,18 @@ elab (name : = notation3) doc : (docComment)? attrs? : (Parser.Term.attributes)?
     | `(notation3Item| $lit : ident $(prec?)? : (scoped $scopedId : ident => $scopedTerm)) =>
       hasScoped := true
       (syntaxArgs, pattArgs) ← pushMacro syntaxArgs pattArgs <|←
-        `(macroArg| $lit : ident : term $(prec?)?)
+        `(macroArg| $lit : ident:term $(prec?)?)
       matchers := matchers.push <|
         mkScopedMatcher lit.getId scopedId.getId scopedTerm boundNames
       let scopedTerm' ← scopedTerm.replaceM fun s => pure (boundValues.find? s.getId)
       boundIdents := boundIdents.insert lit.getId lit
       boundValues := boundValues.insert lit.getId <| ←
         `(expand_binders% ($scopedId => $scopedTerm') $$binders : extBinders,
-          $(⟨lit.1.mkAntiquotNode `term⟩) : term)
+          $(⟨lit.1.mkAntiquotNode `term⟩):term)
       boundNames := boundNames.push lit.getId
     | `(notation3Item| $lit : ident $(prec?)?) =>
       (syntaxArgs, pattArgs) ← pushMacro syntaxArgs pattArgs <|←
-        `(macroArg| $lit : ident : term $(prec?)?)
+        `(macroArg| $lit : ident:term $(prec?)?)
       boundIdents := boundIdents.insert lit.getId lit
       boundValues := boundValues.insert lit.getId <| lit.1.mkAntiquotNode `term
       boundNames := boundNames.push lit.getId
@@ -551,7 +551,7 @@ elab (name : = notation3) doc : (docComment)? attrs? : (Parser.Term.attributes)?
   let name ← mkNameFromSyntax name? syntaxArgs attrKind
   elabCommand <| ← `(command|
     $[$doc]? $(attrs?)? $attrKind
-    syntax $(prec?)? (name := $(Lean.mkIdent name)) $(prio?)? $[$syntaxArgs]* : term)
+    syntax $(prec?)? (name := $(Lean.mkIdent name)) $(prio?)? $[$syntaxArgs]*:term)
 
   -- 2. The `macro_rules`
   let currNamespace : Name ← getCurrNamespace

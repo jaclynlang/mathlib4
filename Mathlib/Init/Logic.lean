@@ -210,7 +210,7 @@ This notation does not allow multiple binders like `∃! (x : α) (y : β), p x 
 as a shorthand for `∃! (x : α), ∃! (y : β), p x y` since it is liable to be misunderstood.
 Often, the intended meaning is instead `∃! q : α × β, p q.1 q.2`.
 -/
-macro "∃!" xs:explicitBinders ", " b:term : term => do
+macro "∃!" xs:explicitBinders ", " b:term:term => do
   if !isExplicitBinderSingular xs then
     Macro.throwErrorAt xs "\
       The `ExistsUnique` notation should not be used with more than one binder.\n\
@@ -236,7 +236,7 @@ such that `p x`.
 Similarly, notations such as `∃! x ≤ n, p n` are supported,
 using any relation defined using the `binder_predicate` command.
 -/
-syntax "∃! " binderIdent binderPred ", " term : term
+syntax "∃! " binderIdent binderPred ", " term:term
 
 macro_rules
   | `(∃! $x : ident $p : binderPred, $b) => `(∃! $x : ident, satisfies_binder_pred% $x $p ∧ $b)

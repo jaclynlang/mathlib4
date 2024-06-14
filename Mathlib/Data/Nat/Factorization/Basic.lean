@@ -64,11 +64,11 @@ theorem factorization_def (n : ℕ) {p : ℕ} (pp : p.Prime) : n.factorization p
 /-- We can write both `n.factorization p` and `n.factors.count p` to represent the power
 of `p` in the factorization of `n`: we declare the former to be the simp-normal form. -/
 @[simp]
-theorem factors_count_eq {n p : ℕ} : n.factors.count p = n.factorization p := by
+theorem primeFactorsList_count_eq {n p : ℕ} : n.primeFactorsList.count p = n.factorization p := by
   rcases n.eq_zero_or_pos with (rfl | hn0)
   · simp [factorization, count]
   if pp : p.Prime then ?_ else
-    rw [count_eq_zero_of_not_mem (mt prime_of_mem_factors pp)]
+    rw [count_eq_zero_of_not_mem (mt prime_of_mem_primeFactorsList pp)]
     simp [factorization, pp]
   simp only [factorization_def _ pp]
   apply _root_.le_antisymm
@@ -81,8 +81,8 @@ theorem factors_count_eq {n p : ℕ} : n.factors.count p = n.factorization p := 
     simp at this
 #align nat.factors_count_eq Nat.factors_count_eq
 
-theorem factorization_eq_factors_multiset (n : ℕ) :
-    n.factorization = Multiset.toFinsupp (n.factors : Multiset ℕ) := by
+theorem factorization_eq_primeFactorsList_multiset (n : ℕ) :
+    n.factorization = Multiset.toFinsupp (n.primeFactorsList : Multiset ℕ) := by
   ext p
   simp
 #align nat.factorization_eq_factors_multiset Nat.factorization_eq_factors_multiset
@@ -99,7 +99,7 @@ theorem multiplicity_eq_factorization {n p : ℕ} (pp : p.Prime) (hn : n ≠ 0) 
 theorem factorization_prod_pow_eq_self {n : ℕ} (hn : n ≠ 0) : n.factorization.prod (· ^ ·) = n := by
   rw [factorization_eq_factors_multiset n]
   simp only [← prod_toMultiset, factorization, Multiset.prod_coe, Multiset.toFinsupp_toMultiset]
-  exact prod_factors hn
+  exact prod_primeFactorsList hn
 #align nat.factorization_prod_pow_eq_self Nat.factorization_prod_pow_eq_self
 
 theorem eq_of_factorization_eq {a b : ℕ} (ha : a ≠ 0) (hb : b ≠ 0)
@@ -244,7 +244,7 @@ theorem factorization_pow (n k : ℕ) : factorization (n ^ k) = k • n.factoriz
 @[simp]
 protected theorem Prime.factorization {p : ℕ} (hp : Prime p) : p.factorization = single p 1 := by
   ext q
-  rw [← factors_count_eq, factors_prime hp, single_apply, count_singleton', if_congr eq_comm] <;>
+  rw [← factors_count_eq, primeFactorsList_prime hp, single_apply, count_singleton', if_congr eq_comm] <;>
     rfl
 #align nat.prime.factorization Nat.Prime.factorization
 
@@ -615,7 +615,7 @@ theorem prod_primeFactors_dvd (n : ℕ) : ∏ p ∈ n.primeFactors, p ∣ n := b
   by_cases hn : n = 0
   · subst hn
     simp
-  simpa [prod_factors hn] using Multiset.toFinset_prod_dvd_prod (n.factors : Multiset ℕ)
+  simpa [prod_primeFactorsList hn] using Multiset.toFinset_prod_dvd_prod (n.primeFactorsList : Multiset ℕ)
 #align nat.prod_prime_factors_dvd Nat.prod_primeFactors_dvd
 
 theorem factorization_gcd {a b : ℕ} (ha_pos : a ≠ 0) (hb_pos : b ≠ 0) :
@@ -624,8 +624,8 @@ theorem factorization_gcd {a b : ℕ} (ha_pos : a ≠ 0) (hb_pos : b ≠ 0) :
   let d := dfac.prod (· ^ ·)
   have dfac_prime : ∀ p : ℕ, p ∈ dfac.support → Prime p := by
     intro p hp
-    have : p ∈ a.factors ∧ p ∈ b.factors := by simpa [dfac] using hp
-    exact prime_of_mem_factors this.1
+    have : p ∈ a.primeFactorsList ∧ p ∈ b.primeFactorsList := by simpa [dfac] using hp
+    exact prime_of_mem_primeFactorsList this.1
   have h1 : d.factorization = dfac := prod_pow_factorization_eq_self dfac_prime
   have hd_pos : d ≠ 0 := (factorizationEquiv.invFun ⟨dfac, dfac_prime⟩).2.ne'
   suffices d = gcd a b by rwa [← this]
@@ -819,16 +819,16 @@ theorem factorization_mul_of_coprime {a b : ℕ} (hab : Coprime a b) :
 
 /-- If `p` is a prime factor of `a` then the power of `p` in `a` is the same that in `a * b`,
 for any `b` coprime to `a`. -/
-theorem factorization_eq_of_coprime_left {p a b : ℕ} (hab : Coprime a b) (hpa : p ∈ a.factors) :
-    (a * b).factorization p = a.factorization p := by
+theorem factorization_eq_of_coprime_left {p a b : ℕ} (hab : Coprime a b)
+    (hpa : p ∈ a.primeFactorsList) : (a * b).factorization p = a.factorization p := by
   rw [factorization_mul_apply_of_coprime hab, ← factors_count_eq, ← factors_count_eq,
     count_eq_zero_of_not_mem (coprime_factors_disjoint hab hpa), add_zero]
 #align nat.factorization_eq_of_coprime_left Nat.factorization_eq_of_coprime_left
 
 /-- If `p` is a prime factor of `b` then the power of `p` in `b` is the same that in `a * b`,
 for any `a` coprime to `b`. -/
-theorem factorization_eq_of_coprime_right {p a b : ℕ} (hab : Coprime a b) (hpb : p ∈ b.factors) :
-    (a * b).factorization p = b.factorization p := by
+theorem factorization_eq_of_coprime_right {p a b : ℕ} (hab : Coprime a b)
+    (hpb : p ∈ b.primeFactorsList) : (a * b).factorization p = b.factorization p := by
   rw [mul_comm]
   exact factorization_eq_of_coprime_left (coprime_comm.mp hab) hpb
 #align nat.factorization_eq_of_coprime_right Nat.factorization_eq_of_coprime_right

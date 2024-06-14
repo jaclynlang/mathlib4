@@ -471,7 +471,7 @@ theorem exists_orderOf_eq_exponent (hG : ExponentExists G) : ∃ g : G, orderOf 
   rw [List.subperm_ext_iff]
   by_contra! h
   obtain ⟨p, hp, hpe⟩ := h
-  replace hp := Nat.prime_of_mem_factors hp
+  replace hp := Nat.prime_of_mem_primeFactorsList hp
   simp only [Nat.factors_count_eq] at hpe
   set k := (orderOf t).factorization p with hk
   obtain ⟨g, hg⟩ := hp.exists_orderOf_eq_pow_factorization_exponent G

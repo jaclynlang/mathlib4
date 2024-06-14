@@ -2119,7 +2119,7 @@ instance instUniqueFactorizationMonoid : UniqueFactorizationMonoid ℕ where
 
 open UniqueFactorizationMonoid
 
-lemma factors_eq : ∀ n : ℕ, normalizedFactors n = n.factors
+lemma factors_eq : ∀ n : ℕ, normalizedFactors n = n.primeFactorsList
   | 0 => by simp
   | n + 1 => by
     rw [← Multiset.rel_eq, ← associated_eq_eq]
@@ -2128,7 +2128,7 @@ lemma factors_eq : ∀ n : ℕ, normalizedFactors n = n.factors
       exact normalizedFactors_prod n.succ_ne_zero
     · intro x hx
       rw [Nat.irreducible_iff_prime, ← Nat.prime_iff]
-      exact Nat.prime_of_mem_factors hx
+      exact Nat.prime_of_mem_primeFactorsList hx
 #align nat.factors_eq Nat.factors_eq
 
 lemma factors_multiset_prod_of_irreducible {s : Multiset ℕ} (h : ∀ x : ℕ, x ∈ s → Irreducible x) :

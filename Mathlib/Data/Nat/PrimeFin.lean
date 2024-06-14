@@ -30,9 +30,9 @@ instance Primes.infinite : Infinite Primes := infinite_setOf_prime.to_subtype
 instance Primes.countable : Countable Primes := ⟨⟨coeNat.coe, coe_nat_injective⟩⟩
 
 /-- The prime factors of a natural number as a finset. -/
-def primeFactors (n : ℕ) : Finset ℕ := n.factors.toFinset
+def primeFactors (n : ℕ) : Finset ℕ := n.primeFactorsList.toFinset
 
-@[simp] lemma toFinset_factors (n : ℕ) : n.factors.toFinset = n.primeFactors := rfl
+@[simp] lemma toFinset_factors (n : ℕ) : n.primeFactorsList.toFinset = n.primeFactors := rfl
 
 @[simp] lemma mem_primeFactors : p ∈ n.primeFactors ↔ p.Prime ∧ p ∣ n ∧ n ≠ 0 := by
   simp_rw [← toFinset_factors, List.mem_toFinset, mem_factors']
@@ -44,7 +44,7 @@ lemma primeFactors_mono (hmn : m ∣ n) (hn : n ≠ 0) : primeFactors m ⊆ prim
   simp only [subset_iff, mem_primeFactors, and_imp]
   exact fun p hp hpm _ ↦ ⟨hp, hpm.trans hmn, hn⟩
 
-lemma mem_primeFactors_iff_mem_factors : p ∈ n.primeFactors ↔ p ∈ n.factors := by
+lemma mem_primeFactors_iff_mem_factors : p ∈ n.primeFactors ↔ p ∈ n.primeFactorsList := by
   simp only [primeFactors, List.mem_toFinset]
 
 lemma prime_of_mem_primeFactors (hp : p ∈ n.primeFactors) : p.Prime := (mem_primeFactors.1 hp).1
@@ -78,11 +78,11 @@ lemma nonempty_primeFactors {n : ℕ} : n.primeFactors.Nonempty ↔ 1 < n := by
     Nat.le_one_iff_eq_zero_or_eq_one]
 
 @[simp] protected lemma Prime.primeFactors (hp : p.Prime) : p.primeFactors = {p} := by
-  simp [Nat.primeFactors, factors_prime hp]
+  simp [Nat.primeFactors, primeFactorsList_prime hp]
 
 lemma primeFactors_mul (ha : a ≠ 0) (hb : b ≠ 0) :
     (a * b).primeFactors = a.primeFactors ∪ b.primeFactors := by
-  ext; simp only [Finset.mem_union, mem_primeFactors_iff_mem_factors, mem_factors_mul ha hb]
+  ext; simp only [Finset.mem_union, mem_primeFactors_iff_mem_factors, mem_primeFactorsList_mul ha hb]
 #align nat.factors_mul_to_finset Nat.primeFactors_mul
 
 lemma Coprime.primeFactors_mul {a b : ℕ} (hab : Coprime a b) :

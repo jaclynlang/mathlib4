@@ -535,16 +535,16 @@ theorem prod_divisorsAntidiagonal' {M : Type*} [CommMonoid M] (f : ℕ → ℕ �
 #align nat.sum_divisors_antidiagonal' Nat.sum_divisorsAntidiagonal'
 
 /-- The factors of `n` are the prime divisors -/
-theorem prime_divisors_eq_to_filter_divisors_prime (n : ℕ) :
-    n.factors.toFinset = (divisors n).filter Prime := by
+theorem primeFactors_eq_to_filter_divisors_prime (n : ℕ) :
+    n.primeFactors = (divisors n).filter Prime := by
   rcases n.eq_zero_or_pos with (rfl | hn)
   · simp
   · ext q
-    simpa [hn, hn.ne', mem_factors] using and_comm
+    simpa [hn, hn.ne', mem_primeFactorsList] using and_comm
 #align nat.prime_divisors_eq_to_filter_divisors_prime Nat.prime_divisors_eq_to_filter_divisors_prime
 
-lemma prime_divisors_filter_dvd_of_dvd {m n : ℕ} (hn : n ≠ 0) (hmn : m ∣ n) :
-    n.factors.toFinset.filter (· ∣ m) = m.factors.toFinset := by
+lemma primeFactors_filter_dvd_of_dvd {m n : ℕ} (hn : n ≠ 0) (hmn : m ∣ n) :
+    n.primeFactors.filter (· ∣ m) = m.primeFactors.toFinset := by
   simp_rw [prime_divisors_eq_to_filter_divisors_prime, filter_comm,
     divisors_filter_dvd_of_dvd hn hmn]
 

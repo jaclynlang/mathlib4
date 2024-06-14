@@ -86,7 +86,7 @@ lemma mem_factoredNumbers_of_dvd {s : Finset ℕ} {m k : ℕ} (h : m ∈ factore
 are in `s`. -/
 lemma mem_factoredNumbers_iff_forall_le {s : Finset ℕ} {m : ℕ} :
     m ∈ factoredNumbers s ↔ m ≠ 0 ∧ ∀ p ≤ m, p.Prime → p ∣ m → p ∈ s := by
-  simp_rw [mem_factoredNumbers, mem_factors']
+  simp_rw [mem_factoredNumbers, mem_primeFactorsList']
   exact ⟨fun ⟨H₀, H₁⟩ ↦ ⟨H₀, fun p _ hp₂ hp₃ ↦ H₁ p ⟨hp₂, hp₃, H₀⟩⟩,
     fun ⟨H₀, H₁⟩ ↦
       ⟨H₀, fun p ⟨hp₁, hp₂, hp₃⟩ ↦ H₁ p (le_of_dvd (Nat.pos_of_ne_zero hp₃) hp₂) hp₁ hp₂⟩⟩
@@ -155,13 +155,14 @@ lemma prod_mem_factoredNumbers (s : Finset ℕ) (n : ℕ) :
     (fun _ hq ↦ (prime_of_mem_primeFactorsList (List.mem_of_mem_filter hq)).prime) H₂
 
 /-- The sets of `s`-factored and of `s ∪ {N}`-factored numbers are the same when `N` is not prime.
-See `Nat.equivProdNatFactoredNumbers` for when `N` is prime. -/
+  See `Nat.equivProdNatFactoredNumbers` for when `N` is prime. -/
 lemma factoredNumbers_insert (s : Finset ℕ) {N : ℕ} (hN : ¬ N.Prime) :
     factoredNumbers (insert N s) = factoredNumbers s := by
   ext m
   refine ⟨fun hm ↦ ⟨hm.1, fun p hp ↦ ?_⟩,
           fun hm ↦ ⟨hm.1, fun p hp ↦ Finset.mem_insert_of_mem <| hm.2 p hp⟩⟩
-  exact Finset.mem_of_mem_insert_of_ne (hm.2 p hp) fun h ↦ hN <| h ▸ prime_of_mem_primeFactorsList hp
+  exact Finset.mem_of_mem_insert_of_ne (hm.2 p hp)
+    fun h ↦ hN <| h ▸ prime_of_mem_primeFactorsList hp
 
 @[gcongr] lemma factoredNumbers_mono {s t : Finset ℕ} (hst : s ≤ t) :
     factoredNumbers s ⊆ factoredNumbers t :=
@@ -274,7 +275,7 @@ lemma mem_smoothNumbers {n m : ℕ} : m ∈ smoothNumbers n ↔ m ≠ 0 ∧ ∀ 
 /-- The `n`-smooth numbers agree with the `Finset.range n`-factored numbers. -/
 lemma smoothNumbers_eq_factoredNumbers (n : ℕ) :
     smoothNumbers n = factoredNumbers (Finset.range n) := by
-  simp only [smoothNumbers, ne_eq, mem_factors', and_imp, factoredNumbers, Finset.mem_range]
+  simp only [smoothNumbers, ne_eq, mem_primeFactorsList', and_imp, factoredNumbers, Finset.mem_range]
 
 /-- The `n`-smooth numbers agree with the `primesBelow n`-factored numbers. -/
 lemma smmoothNumbers_eq_factoredNumbers_primesBelow (n : ℕ) :

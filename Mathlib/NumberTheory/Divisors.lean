@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Aaron Anderson
 -/
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
-import Mathlib.Data.Nat.Factors
+import Mathlib.Data.Nat.PrimeFin
 import Mathlib.Order.Interval.Finset.Nat
 
 #align_import number_theory.divisors from "leanprover-community/mathlib"@"e8638a0fcaf73e4500469f368ef9494e495099b3"
@@ -541,11 +541,11 @@ theorem primeFactors_eq_to_filter_divisors_prime (n : ℕ) :
   · simp
   · ext q
     simpa [hn, hn.ne', mem_primeFactorsList] using and_comm
-#align nat.prime_divisors_eq_to_filter_divisors_prime Nat.prime_divisors_eq_to_filter_divisors_prime
+#align nat.prime_divisors_eq_to_filter_divisors_prime Nat.primeFactors_eq_to_filter_divisors_prime
 
 lemma primeFactors_filter_dvd_of_dvd {m n : ℕ} (hn : n ≠ 0) (hmn : m ∣ n) :
-    n.primeFactors.filter (· ∣ m) = m.primeFactors.toFinset := by
-  simp_rw [prime_divisors_eq_to_filter_divisors_prime, filter_comm,
+    n.primeFactors.filter (· ∣ m) = m.primeFactors := by
+  simp_rw [primeFactors_eq_to_filter_divisors_prime, filter_comm,
     divisors_filter_dvd_of_dvd hn hmn]
 
 @[simp]

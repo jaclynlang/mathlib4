@@ -35,7 +35,7 @@ def primeFactors (n : ℕ) : Finset ℕ := n.primeFactorsList.toFinset
 @[simp] lemma toFinset_factors (n : ℕ) : n.primeFactorsList.toFinset = n.primeFactors := rfl
 
 @[simp] lemma mem_primeFactors : p ∈ n.primeFactors ↔ p.Prime ∧ p ∣ n ∧ n ≠ 0 := by
-  simp_rw [← toFinset_factors, List.mem_toFinset, mem_factors']
+  simp_rw [← toFinset_factors, List.mem_toFinset, mem_primeFactorsList']
 
 lemma mem_primeFactors_of_ne_zero (hn : n ≠ 0) : p ∈ n.primeFactors ↔ p.Prime ∧ p ∣ n := by
   simp [hn]
@@ -82,12 +82,13 @@ lemma nonempty_primeFactors {n : ℕ} : n.primeFactors.Nonempty ↔ 1 < n := by
 
 lemma primeFactors_mul (ha : a ≠ 0) (hb : b ≠ 0) :
     (a * b).primeFactors = a.primeFactors ∪ b.primeFactors := by
-  ext; simp only [Finset.mem_union, mem_primeFactors_iff_mem_factors, mem_primeFactorsList_mul ha hb]
+  ext; simp only [Finset.mem_union, mem_primeFactors_iff_mem_factors,
+    mem_primeFactorsList_mul ha hb]
 #align nat.factors_mul_to_finset Nat.primeFactors_mul
 
 lemma Coprime.primeFactors_mul {a b : ℕ} (hab : Coprime a b) :
     (a * b).primeFactors = a.primeFactors ∪ b.primeFactors :=
-  (List.toFinset.ext <| mem_factors_mul_of_coprime hab).trans <| List.toFinset_union _ _
+  (List.toFinset.ext <| mem_primeFactorsList_mul_of_coprime hab).trans <| List.toFinset_union _ _
 #align nat.factors_mul_to_finset_of_coprime Nat.Coprime.primeFactors_mul
 
 lemma primeFactors_gcd (ha : a ≠ 0) (hb : b ≠ 0) :
@@ -101,7 +102,7 @@ lemma primeFactors_gcd (ha : a ≠ 0) (hb : b ≠ 0) :
 
 protected lemma Coprime.disjoint_primeFactors (hab : Coprime a b) :
     Disjoint a.primeFactors b.primeFactors :=
-  List.disjoint_toFinset_iff_disjoint.2 <| coprime_factors_disjoint hab
+  List.disjoint_toFinset_iff_disjoint.2 <| coprime_primeFactorsList_disjoint hab
 
 lemma primeFactors_pow_succ (n k : ℕ) : (n ^ (k + 1)).primeFactors = n.primeFactors := by
   rcases eq_or_ne n 0 with (rfl | hn)

@@ -116,14 +116,16 @@ theorem one_right (a : ℤ) : J(a | 1) = 1 := by
 is the same as the Jacobi symbol `J(a | p)`. -/
 theorem legendreSym.to_jacobiSym (p : ℕ) [fp : Fact p.Prime] (a : ℤ) :
     legendreSym p a = J(a | p) := by
-  simp only [jacobiSym, primeFactorsList_prime fp.1, List.prod_cons, List.prod_nil, mul_one, List.pmap]
+  simp only [jacobiSym, primeFactorsList_prime fp.1, List.prod_cons, List.prod_nil, mul_one,
+    List.pmap]
 #align legendre_sym.to_jacobi_sym jacobiSym.legendreSym.to_jacobiSym
 
 /-- The Jacobi symbol is multiplicative in its second argument. -/
 theorem mul_right' (a : ℤ) {b₁ b₂ : ℕ} (hb₁ : b₁ ≠ 0) (hb₂ : b₂ ≠ 0) :
     J(a | b₁ * b₂) = J(a | b₁) * J(a | b₂) := by
   rw [jacobiSym, ((perm_factors_mul hb₁ hb₂).pmap _).prod_eq, List.pmap_append, List.prod_append]
-  case h => exact fun p hp => (List.mem_append.mp hp).elim prime_of_mem_primeFactorsList prime_of_mem_primeFactorsList
+  case h => exact fun p hp =>
+    (List.mem_append.mp hp).elim prime_of_mem_primeFactorsList prime_of_mem_primeFactorsList
   case _ => rfl
 #align jacobi_sym.mul_right' jacobiSym.mul_right'
 
@@ -333,7 +335,8 @@ theorem value_at (a : ℤ) {R : Type*} [CommSemiring R] (χ : R →* ℤ)
     (hp : ∀ (p : ℕ) (pp : p.Prime), p ≠ 2 → @legendreSym p ⟨pp⟩ a = χ p) {b : ℕ} (hb : Odd b) :
     J(a | b) = χ b := by
   conv_rhs => rw [← prod_primeFactorsList hb.pos.ne', cast_list_prod, map_list_prod χ]
-  rw [jacobiSym, List.map_map, ← List.pmap_eq_map Nat.Prime _ _ fun _ => prime_of_mem_primeFactorsList]
+  rw [jacobiSym, List.map_map, ← List.pmap_eq_map Nat.Prime _ _
+    fun _ => prime_of_mem_primeFactorsList]
   congr 1; apply List.pmap_congr
   exact fun p h pp _ => hp p pp (hb.ne_two_of_dvd_nat <| dvd_of_mem_factors h)
 #align jacobi_sym.value_at jacobiSym.value_at

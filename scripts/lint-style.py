@@ -378,7 +378,7 @@ def missing_spaces_around_operators(lines, path):
         if is_comment or in_string:
             newlines.append((line_nr, line))
             continue
-        indent = len(line) - len(line.lstrip())
+        num_spaces = len(line) - len(line.lstrip())
         new_line = line.strip()
         (before_comment, spaces, comment) = split_inline_comment(new_line)
 
@@ -399,7 +399,6 @@ def missing_spaces_around_operators(lines, path):
         if ":" in before_comment:
             left = before_comment.count(":") - before_comment.count(":=") - (2 * before_comment.count("::"))
             # Handle a line ending in a colon or double colon separately.
-            # # TODO: need to handle ::, here and below!
             if before_comment.endswith("::"):
                 left -= 1
                 if not before_comment.endswith(" ::"):
@@ -410,11 +409,12 @@ def missing_spaces_around_operators(lines, path):
                 if not before_comment.endswith(" :"):
                     errors += [(ERR_MISSING_SPACE, line_nr, path)]
                     before_comment = f"{before_comment[:-1]} :"
-            # if left != before_comment.count(" : "):
-            #     #errors += [(ERR_MISSING_SPACE, line_nr, path)]
-            #     pass# This replacement is approximate (e.g. doesn't handle purposeful double spaces).
-            #     #before_comment = before_comment.replace(":", " : ").replace("  ", " ").rstrip()
-        newlines.append((line_nr, f'{" " * indent}{before_comment}{spaces}{comment}\n'))
+            # # TODO: need to handle ::, here and below!
+            if left != before_comment.count(" : "):
+                errors += [(ERR_MISSING_SPACE, line_nr, path)]
+                # This replacement is approximate (e.g. doesn't handle purposeful double spaces).
+                #before_comment = before_comment.replace(":", " : ").replace("  ", " ").rstrip()
+        newlines.append((line_nr, f'{line[:num_spaces]}{before_comment}{spaces}{comment}\n'))
     return errors, newlines
 
 def left_arrow_check(lines, path):

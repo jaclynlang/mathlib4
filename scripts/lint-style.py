@@ -400,7 +400,12 @@ def missing_spaces_around_operators(lines, path):
             left = before_comment.count(":") - before_comment.count(":=") - (2 * before_comment.count("::"))
             # Handle a line ending in a colon or double colon separately.
             # # TODO: need to handle ::, here and below!
-            if before_comment.endswith(":"):
+            if before_comment.endswith("::"):
+                left -= 1
+                if not before_comment.endswith(" ::"):
+                    errors += [(ERR_MISSING_SPACE, line_nr, path)]
+                    before_comment = f"{before_comment[:-2]} ::"
+            elif before_comment.endswith(":"):
                 left -= 1
                 if not before_comment.endswith(" :"):
                     errors += [(ERR_MISSING_SPACE, line_nr, path)]

@@ -397,8 +397,8 @@ def missing_spaces_around_operators(lines, path):
                 before_comment = before_comment.replace(":=", " := ").replace("  ", " ").rstrip()
         # Handle : which are not part of :=
         if ":" in before_comment:
-            left = before_comment.count(":") - before_comment.count(":=")
-            # Handle a line ending in a colon separately.
+            left = before_comment.count(":") - before_comment.count(":=") - (2 * before_comment.count("::"))
+            # Handle a line ending in a colon or double colon separately.
             # # TODO: need to handle ::, here and below!
             if before_comment.endswith(":"):
                 left -= 1

@@ -275,7 +275,8 @@ lemma mem_smoothNumbers {n m : ℕ} : m ∈ smoothNumbers n ↔ m ≠ 0 ∧ ∀ 
 /-- The `n`-smooth numbers agree with the `Finset.range n`-factored numbers. -/
 lemma smoothNumbers_eq_factoredNumbers (n : ℕ) :
     smoothNumbers n = factoredNumbers (Finset.range n) := by
-  simp only [smoothNumbers, ne_eq, mem_primeFactorsList', and_imp, factoredNumbers, Finset.mem_range]
+  simp only [smoothNumbers, ne_eq, mem_primeFactorsList', and_imp, factoredNumbers,
+    Finset.mem_range]
 
 /-- The `n`-smooth numbers agree with the `primesBelow n`-factored numbers. -/
 lemma smmoothNumbers_eq_factoredNumbers_primesBelow (n : ℕ) :

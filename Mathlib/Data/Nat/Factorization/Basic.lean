@@ -823,7 +823,8 @@ theorem factorization_mul_of_coprime {a b : ℕ} (hab : Coprime a b) :
 for any `b` coprime to `a`. -/
 theorem factorization_eq_of_coprime_left {p a b : ℕ} (hab : Coprime a b)
     (hpa : p ∈ a.primeFactorsList) : (a * b).factorization p = a.factorization p := by
-  rw [factorization_mul_apply_of_coprime hab, ← primeFactorsList_count_eq, ← primeFactorsList_count_eq,
+  rw [factorization_mul_apply_of_coprime hab, ← primeFactorsList_count_eq,
+    ← primeFactorsList_count_eq,
     count_eq_zero_of_not_mem (coprime_primeFactorsList_disjoint hab hpa), add_zero]
 #align nat.factorization_eq_of_coprime_left Nat.factorization_eq_of_coprime_left
 

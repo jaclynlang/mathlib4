@@ -65,7 +65,7 @@ theorem squarefree_of_factorization_le_one {n : ℕ} (hn : n ≠ 0) (hn' : ∀ p
     Squarefree n := by
   rw [squarefree_iff_nodup_primeFactorsList hn, List.nodup_iff_count_le_one]
   intro a
-  rw [factors_count_eq]
+  rw [primeFactorsList_count_eq]
   apply hn'
 #align nat.squarefree_of_factorization_le_one Nat.squarefree_of_factorization_le_one
 

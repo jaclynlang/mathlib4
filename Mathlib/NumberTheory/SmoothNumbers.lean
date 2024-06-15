@@ -227,7 +227,7 @@ def equivProdNatFactoredNumbers {s : Finset ℕ} {p : ℕ} (hp: p.Prime) (hs : p
       simp only [factorization_pow, Finsupp.coe_add, Finsupp.coe_smul, nsmul_eq_mul,
         Pi.natCast_def, cast_id, Pi.add_apply, Pi.mul_apply, hp.factorization_self,
         mul_one, add_right_eq_self]
-      rw [← factors_count_eq, count_eq_zero]
+      rw [← primeFactorsList_count_eq, count_eq_zero]
       exact fun H ↦ hs (hm p H)
     · nth_rewrite 2 [← prod_primeFactorsList hm₀]
       refine prod_eq <| (filter _ <| perm_factors_mul (pow_ne_zero e hp.ne_zero) hm₀).trans ?_
@@ -237,7 +237,7 @@ def equivProdNatFactoredNumbers {s : Finset ℕ} {p : ℕ} (hp: p.Prime) (hs : p
   right_inv := by
     rintro ⟨m, hm₀, hm⟩
     simp only [Set.coe_setOf, Set.mem_setOf_eq, Subtype.mk.injEq]
-    rw [← factors_count_eq, ← prod_replicate, ← prod_append]
+    rw [← primeFactorsList_count_eq, ← prod_replicate, ← prod_append]
     nth_rewrite 3 [← prod_primeFactorsList hm₀]
     have : m.primeFactorsList.filter (· = p) = m.primeFactorsList.filter (¬ · ∈ s) := by
       refine (filter_congr' fun q hq ↦ ?_).symm

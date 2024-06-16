@@ -286,7 +286,7 @@ theorem eq_neg_one_at_prime_divisor_of_eq_neg_one {a : ℤ} {n : ℕ} (h : J(a |
     rintro rfl
     rw [zero_right, eq_neg_self_iff] at h
     exact one_ne_zero h
-  have hf₀ : ∀ p ∈ n.primeFactorsList, p ≠ 0 := fun p hp => (Nat.pos_of_mem_factors hp).ne.symm
+  have hf₀ (p) (hp : p ∈ n.primeFactorsList) : p ≠ 0 := (Nat.pos_of_mem_primeFactorsList hp).ne.symm
   rw [← Nat.prod_primeFactorsList hn₀, list_prod_right hf₀] at h
   obtain ⟨p, hmem, hj⟩ := List.mem_map.mp (List.neg_one_mem_of_prod_eq_neg_one h)
   exact ⟨p, Nat.prime_of_mem_primeFactorsList hmem, Nat.dvd_of_mem_factors hmem, hj⟩

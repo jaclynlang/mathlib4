@@ -467,7 +467,7 @@ theorem exists_orderOf_eq_exponent (hG : ExponentExists G) : ∃ g : G, orderOf 
   obtain ⟨t, ht⟩ := hne.csSup_mem hfin
   use t
   apply Nat.dvd_antisymm (order_dvd_exponent _)
-  refine Nat.dvd_of_factors_subperm he ?_
+  refine Nat.dvd_of_primeFactorsList_subperm he ?_
   rw [List.subperm_ext_iff]
   by_contra! h
   obtain ⟨p, hp, hpe⟩ := h

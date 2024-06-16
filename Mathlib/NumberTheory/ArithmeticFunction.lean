@@ -998,7 +998,7 @@ theorem cardFactors_apply_prime {p : ℕ} (hp : p.Prime) : Ω p = 1 :=
 
 @[simp]
 theorem cardFactors_apply_prime_pow {p k : ℕ} (hp : p.Prime) : Ω (p ^ k) = k := by
-  rw [cardFactors_apply, hp.factors_pow, List.length_replicate]
+  rw [cardFactors_apply, hp.primeFactorsList_pow, List.length_replicate]
 #align nat.arithmetic_function.card_factors_apply_prime_pow ArithmeticFunction.cardFactors_apply_prime_pow
 
 /-- `ω n` is the number of distinct prime factors of `n`. -/
@@ -1036,7 +1036,8 @@ theorem cardDistinctFactors_eq_cardFactors_iff_squarefree {n : ℕ} (h0 : n ≠ 
 @[simp]
 theorem cardDistinctFactors_apply_prime_pow {p k : ℕ} (hp : p.Prime) (hk : k ≠ 0) :
     ω (p ^ k) = 1 := by
-  rw [cardDistinctFactors_apply, hp.factors_pow, List.replicate_dedup hk, List.length_singleton]
+  rw [cardDistinctFactors_apply, hp.primeFactorsList_pow, List.replicate_dedup hk,
+    List.length_singleton]
 #align nat.arithmetic_function.card_distinct_factors_apply_prime_pow ArithmeticFunction.cardDistinctFactors_apply_prime_pow
 
 @[simp]

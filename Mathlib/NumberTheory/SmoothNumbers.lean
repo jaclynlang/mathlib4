@@ -148,7 +148,7 @@ lemma mul_mem_factoredNumbers {s : Finset ℕ} {m n : ℕ} (hm : m ∈ factoredN
 lemma prod_mem_factoredNumbers (s : Finset ℕ) (n : ℕ) :
     (n.primeFactorsList.filter (· ∈ s)).prod ∈ factoredNumbers s := by
   have h₀ : (n.primeFactorsList.filter (· ∈ s)).prod ≠ 0 :=
-    List.prod_ne_zero fun h ↦ (pos_of_mem_factors (List.mem_of_mem_filter h)).false
+    List.prod_ne_zero fun h ↦ (pos_of_mem_primeFactorsList (List.mem_of_mem_filter h)).false
   refine ⟨h₀, fun p hp ↦ ?_⟩
   obtain ⟨H₁, H₂⟩ := (mem_primeFactorsList h₀).mp hp
   simpa only [decide_eq_true_eq] using List.of_mem_filter <| mem_list_primes_of_dvd_prod H₁.prime
@@ -231,7 +231,7 @@ def equivProdNatFactoredNumbers {s : Finset ℕ} {p : ℕ} (hp: p.Prime) (hs : p
       exact fun H ↦ hs (hm p H)
     · nth_rewrite 2 [← prod_primeFactorsList hm₀]
       refine prod_eq <| (filter _ <| perm_factors_mul (pow_ne_zero e hp.ne_zero) hm₀).trans ?_
-      rw [filter_append, hp.factors_pow,
+      rw [filter_append, hp.primeFactorsList_pow,
           filter_eq_nil.mpr fun q hq ↦ by rw [mem_replicate] at hq; simp [hq.2, hs],
           nil_append, filter_eq_self.mpr fun q hq ↦ by simp only [hm q hq, decide_True]]
   right_inv := by

@@ -100,8 +100,8 @@ theorem isPrimePow_iff_unique_prime_dvd {n : ℕ} : IsPrimePow n ↔ ∃! p : �
   simp only [and_imp] at hq
   apply Nat.dvd_antisymm (Nat.ord_proj_dvd _ _)
   -- We need to show n ∣ p ^ n.factorization p
-  apply Nat.dvd_of_factors_subperm hn₀
-  rw [hp.factors_pow, List.subperm_ext_iff]
+  apply Nat.dvd_of_primeFactorsList_subperm hn₀
+  rw [hp.primeFactorsList_pow, List.subperm_ext_iff]
   intro q hq'
   rw [Nat.mem_primeFactorsList hn₀] at hq'
   cases hq _ hq'.1 hq'.2

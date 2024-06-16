@@ -702,7 +702,7 @@ instance Factors.isPrime (P : (factors (map (algebraMap R S) p)).toFinset) :
 theorem Factors.ramificationIdx_ne_zero (P : (factors (map (algebraMap R S) p)).toFinset) :
     ramificationIdx (algebraMap R S) p P ≠ 0 :=
   IsDedekindDomain.ramificationIdx_ne_zero (ne_zero_of_mem_factors (Multiset.mem_toFinset.mp P.2))
-    (Factors.isPrime p P) (Ideal.le_of_dvd (dvd_of_mem_primeFactorsList (Multiset.mem_toFinset.mp P.2)))
+    (Factors.isPrime p P) (Ideal.le_of_dvd (dvd_of_mem_factors (Multiset.mem_toFinset.mp P.2)))
 #align ideal.factors.ramification_idx_ne_zero Ideal.Factors.ramificationIdx_ne_zero
 
 instance Factors.fact_ramificationIdx_neZero (P : (factors (map (algebraMap R S) p)).toFinset) :

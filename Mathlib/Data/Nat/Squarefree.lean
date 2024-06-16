@@ -29,12 +29,12 @@ theorem squarefree_iff_nodup_primeFactorsList {n : ℕ} (h0 : n ≠ 0) :
     Squarefree n ↔ n.primeFactorsList.Nodup := by
   rw [UniqueFactorizationMonoid.squarefree_iff_nodup_normalizedFactors h0, Nat.factors_eq]
   simp
-#align nat.squarefree_iff_nodup_factors squarefree_iff_nodup_primeFactorsList
+#align nat.squarefree_iff_nodup_factors Nat.squarefree_iff_nodup_primeFactorsList
 
 end Nat
 
 theorem Squarefree.nodup_primeFactorsList {n : ℕ} (hn : Squarefree n) : n.primeFactorsList.Nodup :=
-  (squarefree_iff_nodup_primeFactorsList hn.ne_zero).mp hn
+  (Nat.squarefree_iff_nodup_primeFactorsList hn.ne_zero).mp hn
 
 namespace Nat
 variable {s : Finset ℕ} {m n p : ℕ}
@@ -393,7 +393,7 @@ lemma coprime_div_gcd_of_squarefree (hm : Squarefree m) (hn : n ≠ 0) : Coprime
     (coprime_div_gcd_div_gcd (m := m) (gcd_ne_zero_right hn).bot_lt).mul_right this
 
 lemma prod_primeFactors_of_squarefree (hn : Squarefree n) : ∏ p ∈ n.primeFactors, p = n := by
-  rw [← toFinset_factors, List.prod_toFinset _ hn.squarefree_iff_nodup_primeFactorsList,
+  rw [← toFinset_factors, List.prod_toFinset _ hn.nodup_primeFactorsList,
     List.map_id', Nat.prod_primeFactorsList hn.ne_zero]
 
 lemma primeFactors_prod (hs : ∀ p ∈ s, p.Prime) : primeFactors (∏ p ∈ s, p) = s := by

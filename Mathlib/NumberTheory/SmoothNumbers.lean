@@ -132,8 +132,8 @@ lemma mem_factoredNumbers_iff_primeFactors_subset {s : Finset ℕ} {m : ℕ} :
 lemma factoredNumbers_empty : factoredNumbers ∅ = {1} := by
   ext m
   simp only [mem_factoredNumbers, Finset.not_mem_empty, ← List.eq_nil_iff_forall_not_mem,
-    factors_eq_nil, and_or_left, not_and_self_iff, ne_and_eq_iff_right zero_ne_one, false_or,
-    Set.mem_singleton_iff]
+    primeFactorsList_eq_nil, and_or_left, not_and_self_iff, ne_and_eq_iff_right zero_ne_one,
+    false_or, Set.mem_singleton_iff]
 
 /-- The product of two `s`-factored numbers is again `s`-factored. -/
 lemma mul_mem_factoredNumbers {s : Finset ℕ} {m n : ℕ} (hm : m ∈ factoredNumbers s)
@@ -179,7 +179,7 @@ lemma factoredNumbers_compl {N : ℕ} {s : Finset ℕ} (h : primesBelow N ≤ s)
   have : N ≤ p := by
     contrapose! hp₂
     exact h <| mem_primesBelow.mpr ⟨hp₂, prime_of_mem_primeFactorsList hp₁⟩
-  exact this.trans <| le_of_mem_factors hp₁
+  exact this.trans <| le_of_mem_primeFactorsList hp₁
 
 /-- If `p` is a prime and `n` is `s`-factored, then every product `p^e * n`
 is `s ∪ {p}`-factored. -/
@@ -198,7 +198,7 @@ lemma pow_mul_mem_factoredNumbers {s : Finset ℕ} {p n : ℕ} (hp : p.Prime) (e
 lemma Prime.factoredNumbers_coprime {s : Finset ℕ} {p n : ℕ} (hp : p.Prime) (hs : p ∉ s)
     (hn : n ∈ factoredNumbers s) :
     Nat.Coprime p n := by
-  rw [hp.coprime_iff_not_dvd, ← mem_factors_iff_dvd hn.1 hp]
+  rw [hp.coprime_iff_not_dvd, ← mem_primeFactorsList_iff_dvd hn.1 hp]
   exact fun H ↦ hs <| hn.2 p H
 
 /-- If `f : ℕ → F` is multiplicative on coprime arguments, `p ∉ s` is a prime and `m`
@@ -230,7 +230,8 @@ def equivProdNatFactoredNumbers {s : Finset ℕ} {p : ℕ} (hp: p.Prime) (hs : p
       rw [← primeFactorsList_count_eq, count_eq_zero]
       exact fun H ↦ hs (hm p H)
     · nth_rewrite 2 [← prod_primeFactorsList hm₀]
-      refine prod_eq <| (filter _ <| perm_factors_mul (pow_ne_zero e hp.ne_zero) hm₀).trans ?_
+      refine prod_eq <|
+        (filter _ <| perm_primeFactorsList_mul (pow_ne_zero e hp.ne_zero) hm₀).trans ?_
       rw [filter_append, hp.primeFactorsList_pow,
           filter_eq_nil.mpr fun q hq ↦ by rw [mem_replicate] at hq; simp [hq.2, hs],
           nil_append, filter_eq_self.mpr fun q hq ↦ by simp only [hm q hq, decide_True]]
@@ -358,7 +359,7 @@ lemma smoothNumbers_succ {N : ℕ} (hN : ¬ N.Prime) : N.succ.smoothNumbers = N.
 /-- All `m`, `0 < m < n` are `n`-smooth numbers -/
 lemma mem_smoothNumbers_of_lt {m n : ℕ} (hm : 0 < m) (hmn : m < n) : m ∈ n.smoothNumbers :=
   smoothNumbers_eq_factoredNumbers _ ▸ ⟨not_eq_zero_of_lt hm,
-  fun _ h => Finset.mem_range.mpr <| lt_of_le_of_lt (le_of_mem_factors h) hmn⟩
+  fun _ h => Finset.mem_range.mpr <| lt_of_le_of_lt (le_of_mem_primeFactorsList h) hmn⟩
 
 /-- The non-zero non-`N`-smooth numbers are `≥ N`. -/
 lemma smoothNumbers_compl (N : ℕ) : (N.smoothNumbers)ᶜ \ {0} ⊆ {n | N ≤ n} := by

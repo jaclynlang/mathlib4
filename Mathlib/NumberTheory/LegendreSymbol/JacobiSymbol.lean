@@ -103,13 +103,13 @@ namespace jacobiSym
 /-- The symbol `J(a | 0)` has the value `1`. -/
 @[simp]
 theorem zero_right (a : ℤ) : J(a | 0) = 1 := by
-  simp only [jacobiSym, factors_zero, List.prod_nil, List.pmap]
+  simp only [jacobiSym, primeFactorsList_zero, List.prod_nil, List.pmap]
 #align jacobi_sym.zero_right jacobiSym.zero_right
 
 /-- The symbol `J(a | 1)` has the value `1`. -/
 @[simp]
 theorem one_right (a : ℤ) : J(a | 1) = 1 := by
-  simp only [jacobiSym, factors_one, List.prod_nil, List.pmap]
+  simp only [jacobiSym, primeFactorsList_one, List.prod_nil, List.pmap]
 #align jacobi_sym.one_right jacobiSym.one_right
 
 /-- The Legendre symbol `legendreSym p a` with an integer `a` and a prime number `p`
@@ -123,7 +123,8 @@ theorem legendreSym.to_jacobiSym (p : ℕ) [fp : Fact p.Prime] (a : ℤ) :
 /-- The Jacobi symbol is multiplicative in its second argument. -/
 theorem mul_right' (a : ℤ) {b₁ b₂ : ℕ} (hb₁ : b₁ ≠ 0) (hb₂ : b₂ ≠ 0) :
     J(a | b₁ * b₂) = J(a | b₁) * J(a | b₂) := by
-  rw [jacobiSym, ((perm_factors_mul hb₁ hb₂).pmap _).prod_eq, List.pmap_append, List.prod_append]
+  rw [jacobiSym, ((perm_primeFactorsList_mul hb₁ hb₂).pmap _).prod_eq, List.pmap_append,
+    List.prod_append]
   case h => exact fun p hp =>
     (List.mem_append.mp hp).elim prime_of_mem_primeFactorsList prime_of_mem_primeFactorsList
   case _ => rfl
@@ -242,7 +243,7 @@ theorem mod_left (a : ℤ) (b : ℕ) : J(a | b) = J(a % b | b) :=
         letI : Fact p.Prime := ⟨h₂⟩
         conv_rhs =>
           rw [legendreSym.mod, Int.emod_emod_of_dvd _ (Int.natCast_dvd_natCast.2 <|
-            dvd_of_mem_factors hp), ← legendreSym.mod])
+            dvd_of_mem_primeFactorsList hp), ← legendreSym.mod])
 #align jacobi_sym.mod_left jacobiSym.mod_left
 
 /-- The symbol `J(a | b)` depends only on `a` mod `b`. -/
@@ -289,7 +290,7 @@ theorem eq_neg_one_at_prime_divisor_of_eq_neg_one {a : ℤ} {n : ℕ} (h : J(a |
   have hf₀ (p) (hp : p ∈ n.primeFactorsList) : p ≠ 0 := (Nat.pos_of_mem_primeFactorsList hp).ne.symm
   rw [← Nat.prod_primeFactorsList hn₀, list_prod_right hf₀] at h
   obtain ⟨p, hmem, hj⟩ := List.mem_map.mp (List.neg_one_mem_of_prod_eq_neg_one h)
-  exact ⟨p, Nat.prime_of_mem_primeFactorsList hmem, Nat.dvd_of_mem_factors hmem, hj⟩
+  exact ⟨p, Nat.prime_of_mem_primeFactorsList hmem, Nat.dvd_of_mem_primeFactorsList hmem, hj⟩
 #align jacobi_sym.eq_neg_one_at_prime_divisor_of_eq_neg_one jacobiSym.eq_neg_one_at_prime_divisor_of_eq_neg_one
 
 end jacobiSym
@@ -338,7 +339,7 @@ theorem value_at (a : ℤ) {R : Type*} [CommSemiring R] (χ : R →* ℤ)
   rw [jacobiSym, List.map_map, ← List.pmap_eq_map Nat.Prime _ _
     fun _ => prime_of_mem_primeFactorsList]
   congr 1; apply List.pmap_congr
-  exact fun p h pp _ => hp p pp (hb.ne_two_of_dvd_nat <| dvd_of_mem_factors h)
+  exact fun p h pp _ => hp p pp (hb.ne_two_of_dvd_nat <| dvd_of_mem_primeFactorsList h)
 #align jacobi_sym.value_at jacobiSym.value_at
 
 /-- If `b` is odd, then `J(-1 | b)` is given by `χ₄ b`. -/

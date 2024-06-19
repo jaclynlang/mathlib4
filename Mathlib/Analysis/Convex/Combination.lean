@@ -372,7 +372,7 @@ lemma mem_convexHull_iff_exists_fintype {s : Set E} {x : E} :
 /-- Universe polymorphic version of the reverse implication of `mem_convexHull_iff_exists_fintype`.
 -/
 lemma mem_convexHull_of_exists_fintype {s : Set E} {x : E} [Fintype ι] (w : ι → R) (z : ι → E)
-      (hw₀ : ∀ i, 0 ≤ w i) (hw₁ : ∑ i, w i = 1) (hz : ∀ i, z i ∈ s) (hx : ∑ i, w i • z i = x) :
+    (hw₀ : ∀ i, 0 ≤ w i) (hw₁ : ∑ i, w i = 1) (hz : ∀ i, z i ∈ s) (hx : ∑ i, w i • z i = x) :
     x ∈ convexHull R s := by
   rw [← hx, ← centerMass_eq_of_sum_1 _ _ hw₁]
   exact centerMass_mem_convexHull _ (by simpa using hw₀) (by simp [hw₁]) (by simpa using hz)

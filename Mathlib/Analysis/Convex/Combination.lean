@@ -413,15 +413,7 @@ theorem mk_mem_convexHull_prod {t : Set F} {x : E} {y : F} (hx : x ∈ convexHul
   obtain ⟨ι, a, w, S, hw, hw', hS, hSp⟩ := hx
   obtain ⟨κ, b, v, T, hv, hv', hT, hTp⟩ := hy
   have h_sum : ∑ i ∈ a ×ˢ b, w i.fst * v i.snd = 1 := by
-    rw [Finset.sum_product, ← hw']
-    congr
-    ext i
-    have : ∑ y ∈ b, w i * v y = ∑ y ∈ b, v y * w i := by
-      congr
-      ext
-      simp [mul_comm]
-    rw [this, ← Finset.sum_mul, hv']
-    simp
+    rw [Finset.sum_product, ← sum_mul_sum, hw', hv', mul_one]
   refine
     ⟨ι × κ, a ×ˢ b, fun p => w p.1 * v p.2, fun p => (S p.1, T p.2), fun p hp => ?_, h_sum,
       fun p hp => ?_, ?_⟩
@@ -492,6 +484,52 @@ theorem convexHull_sum {ι} (s : Finset ι) (t : ι → Set E) :
     convexHull R (∑ i ∈ s, t i) = ∑ i ∈ s, convexHull R (t i) :=
   map_sum (convexHullAddMonoidHom R E) _ _
 #align convex_hull_sum convexHull_sum
+
+section pi
+variable {𝕜 ι : Type*} {E : ι → Type*} [Fintype ι] [LinearOrderedField 𝕜]
+  [Π i, AddCommGroup (E i)] [Π i, Module 𝕜 (E i)] {s : Set ι} {t : Π i, Set (E i)} {f : Π i, E i}
+
+open Fintype
+
+lemma mem_convexHull_pi (h : ∀ i ∈ s, f i ∈ convexHull 𝕜 (t i)) : f ∈ convexHull 𝕜 (s.pi t) := by
+  lift s to Finset ι using toFinite s
+  simp_rw [_root_.convexHull_eq] at h ⊢
+  choose κ a w S hw hw' hS hSp using h
+  have h_sum :
+    ∑ k ∈ piFinset fun i ↦ a i.1 i.2, ∏ i : s, w i.1 i.2 (k i) = 1 := by
+    rw [← prod_univ_sum]; exact prod_eq_one fun _ _ ↦ hw' _ _
+  refine
+    ⟨Π i : s, κ i.1 i.2, a ×ˢ b, fun p => w p.1 * v p.2, fun p => (S p.1, T p.2), fun p hp => ?_, h_sum,
+      fun p hp => ?_, ?_⟩
+  · rw [mem_product] at hp
+    exact mul_nonneg (hw p.1 hp.1) (hv p.2 hp.2)
+  · rw [mem_product] at hp
+    exact ⟨hS p.1 hp.1, hT p.2 hp.2⟩
+  ext
+  · rw [← hSp, Finset.centerMass_eq_of_sum_1 _ _ hw', Finset.centerMass_eq_of_sum_1 _ _ h_sum]
+    simp_rw [Prod.fst_sum, Prod.smul_mk]
+    rw [Finset.sum_product]
+    congr
+    ext i
+    have : (∑ j ∈ b, (w i * v j) • S i) = ∑ j ∈ b, v j • w i • S i := by
+      congr
+      ext
+      rw [mul_smul, smul_comm]
+    rw [this, ← Finset.sum_smul, hv', one_smul]
+  · rw [← hTp, Finset.centerMass_eq_of_sum_1 _ _ hv', Finset.centerMass_eq_of_sum_1 _ _ h_sum]
+    simp_rw [Prod.snd_sum, Prod.smul_mk]
+    rw [Finset.sum_product, Finset.sum_comm]
+    congr
+    ext j
+    simp_rw [mul_smul]
+    rw [← Finset.sum_smul, hw', one_smul]
+
+@[simp] lemma convexHull_pi (s : Set ι) (t : Π i, Set (E i)) :
+    convexHull 𝕜 (s.pi t) = s.pi (fun i ↦ convexHull 𝕜 (t i)) :=
+  Set.Subset.antisymm (convexHull_min (Set.pi_mono fun _ _ ↦ subset_convexHull _ _) $ convex_pi $
+    fun _ _ ↦ convex_convexHull _ _) fun _ ↦ mem_convexHull_pi
+
+end pi
 
 /-! ### `stdSimplex` -/
 

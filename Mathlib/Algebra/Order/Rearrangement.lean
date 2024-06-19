@@ -41,13 +41,6 @@ convenience.
 
 The case for `Monotone`/`Antitone` pairs of functions over a `LinearOrder` is not deduced in this
 file because it is easily deducible from the `Monovary` API.
-
-## TODO
-
-We could golf this file by adding a typeclass `ExistsAddOrAddOfLE α` stating that
-`a ≤ b → ∃ c, a + c = b ∨ a = b + c`, prove it implies the binary rearrangement inequality and
-provide the instances `ExistsAddOfLE α → ExistsAddOrAddOfLE α` and
-`ExistsAddOrAddOfLE α → ExistsAddOrAddOfLE αᵒᵈ`.
 -/
 
 
@@ -71,7 +64,7 @@ theorem MonovaryOn.sum_smul_comp_perm_le_sum_smul (hfg : MonovaryOn f g s)
   revert hσ σ hfg
   -- Porting note: Specify `p` to get around `∀ {σ}` in the current goal.
   apply Finset.induction_on_max_value (fun i ↦ toLex (g i, f i))
-    (p := fun t ↦ ∀ {σ : Perm ι}, MonovaryOn f g t → { x | σ x ≠ x } ⊆ t →
+    (p := fun t ↦ ∀ {σ : Perm ι}, MonovaryOn f g t → {x | σ x ≠ x} ⊆ t →
       ∑ i ∈ t, f i • g (σ i) ≤ ∑ i ∈ t, f i • g i) s
   · simp only [le_rfl, Finset.sum_empty, imp_true_iff]
   intro a s has hamax hind σ hfg hσ
@@ -114,18 +107,11 @@ theorem MonovaryOn.sum_smul_comp_perm_le_sum_smul (hfg : MonovaryOn f g s)
     exact has hx.2
 #align monovary_on.sum_smul_comp_perm_le_sum_smul MonovaryOn.sum_smul_comp_perm_le_sum_smul
 
-/-- **Rearrangement Inequality**: Pointwise scalar multiplication of `f` and `g` is minimized when
-`f` and `g` antivary together. Stated by permuting the entries of `g`. -/
-theorem AntivaryOn.sum_smul_le_sum_smul_comp_perm (hfg : AntivaryOn f g s)
-    (hσ : {x | σ x ≠ x} ⊆ s) : ∑ i ∈ s, f i • g i ≤ ∑ i ∈ s, f i • g (σ i) :=
-  hfg.dual_right.sum_smul_comp_perm_le_sum_smul hσ
-#align antivary_on.sum_smul_le_sum_smul_comp_perm AntivaryOn.sum_smul_le_sum_smul_comp_perm
-
 /-- **Equality case of the Rearrangement Inequality**: Pointwise scalar multiplication of `f` and
 `g`, which monovary together, is unchanged by a permutation if and only if `f` and `g ∘ σ` monovary
 together. Stated by permuting the entries of `g`. -/
 theorem MonovaryOn.sum_smul_comp_perm_eq_sum_smul_iff (hfg : MonovaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f i • g (σ i) = ∑ i ∈ s, f i • g i ↔ MonovaryOn f (g ∘ σ) s := by
   classical
   refine ⟨not_imp_not.1 fun h ↦ ?_, fun h ↦ (hfg.sum_smul_comp_perm_le_sum_smul hσ).antisymm ?_⟩
@@ -150,34 +136,15 @@ theorem MonovaryOn.sum_smul_comp_perm_eq_sum_smul_iff (hfg : MonovaryOn f g s)
     simp_rw [Function.comp_apply, apply_inv_self]
 #align monovary_on.sum_smul_comp_perm_eq_sum_smul_iff MonovaryOn.sum_smul_comp_perm_eq_sum_smul_iff
 
-/-- **Equality case of the Rearrangement Inequality**: Pointwise scalar multiplication of `f` and
-`g`, which antivary together, is unchanged by a permutation if and only if `f` and `g ∘ σ` antivary
-together. Stated by permuting the entries of `g`. -/
-theorem AntivaryOn.sum_smul_comp_perm_eq_sum_smul_iff (hfg : AntivaryOn f g s)
-    (hσ : {x | σ x ≠ x} ⊆ s) :
-    ∑ i ∈ s, f i • g (σ i) = ∑ i ∈ s, f i • g i ↔ AntivaryOn f (g ∘ σ) s :=
-  (hfg.dual_right.sum_smul_comp_perm_eq_sum_smul_iff hσ).trans monovaryOn_toDual_right
-#align antivary_on.sum_smul_eq_sum_smul_comp_perm_iff AntivaryOn.sum_smul_comp_perm_eq_sum_smul_iff
-
 /-- **Strict inequality case of the Rearrangement Inequality**: Pointwise scalar multiplication of
 `f` and `g`, which monovary together, is strictly decreased by a permutation if and only if
 `f` and `g ∘ σ` do not monovary together. Stated by permuting the entries of `g`. -/
 theorem MonovaryOn.sum_smul_comp_perm_lt_sum_smul_iff (hfg : MonovaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f i • g (σ i) < ∑ i ∈ s, f i • g i ↔ ¬MonovaryOn f (g ∘ σ) s := by
   simp [← hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ, lt_iff_le_and_ne,
     hfg.sum_smul_comp_perm_le_sum_smul hσ]
 #align monovary_on.sum_smul_comp_perm_lt_sum_smul_iff MonovaryOn.sum_smul_comp_perm_lt_sum_smul_iff
-
-/-- **Strict inequality case of the Rearrangement Inequality**: Pointwise scalar multiplication of
-`f` and `g`, which antivary together, is strictly decreased by a permutation if and only if
-`f` and `g ∘ σ` do not antivary together. Stated by permuting the entries of `g`. -/
-theorem AntivaryOn.sum_smul_lt_sum_smul_comp_perm_iff (hfg : AntivaryOn f g s)
-    (hσ : {x | σ x ≠ x} ⊆ s) :
-    ∑ i ∈ s, f i • g i < ∑ i ∈ s, f i • g (σ i) ↔ ¬AntivaryOn f (g ∘ σ) s := by
-  simp [← hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ, lt_iff_le_and_ne, eq_comm,
-    hfg.sum_smul_le_sum_smul_comp_perm hσ]
-#align antivary_on.sum_smul_lt_sum_smul_comp_perm_iff AntivaryOn.sum_smul_lt_sum_smul_comp_perm_iff
 
 /-- **Rearrangement Inequality**: Pointwise scalar multiplication of `f` and `g` is maximized when
 `f` and `g` monovary together. Stated by permuting the entries of `f`. -/
@@ -188,20 +155,11 @@ theorem MonovaryOn.sum_comp_perm_smul_le_sum_smul (hfg : MonovaryOn f g s)
   exact σ.sum_comp' s (fun i j ↦ f i • g j) hσ
 #align monovary_on.sum_comp_perm_smul_le_sum_smul MonovaryOn.sum_comp_perm_smul_le_sum_smul
 
-/-- **Rearrangement Inequality**: Pointwise scalar multiplication of `f` and `g` is minimized when
-`f` and `g` antivary together. Stated by permuting the entries of `f`. -/
-theorem AntivaryOn.sum_smul_le_sum_comp_perm_smul (hfg : AntivaryOn f g s)
-    (hσ : {x | σ x ≠ x} ⊆ s) : ∑ i ∈ s, f i • g i ≤ ∑ i ∈ s, f (σ i) • g i := by
-  convert hfg.sum_smul_le_sum_smul_comp_perm
-    (show { x | σ⁻¹ x ≠ x } ⊆ s by simp only [set_support_inv_eq, hσ]) using 1
-  exact σ.sum_comp' s (fun i j ↦ f i • g j) hσ
-#align antivary_on.sum_smul_le_sum_comp_perm_smul AntivaryOn.sum_smul_le_sum_comp_perm_smul
-
 /-- **Equality case of the Rearrangement Inequality**: Pointwise scalar multiplication of `f` and
 `g`, which monovary together, is unchanged by a permutation if and only if `f ∘ σ` and `g` monovary
 together. Stated by permuting the entries of `f`. -/
 theorem MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff (hfg : MonovaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f (σ i) • g i = ∑ i ∈ s, f i • g i ↔ MonovaryOn (f ∘ σ) g s := by
   have hσinv : { x | σ⁻¹ x ≠ x } ⊆ s := (set_support_inv_eq _).subset.trans hσ
   refine (Iff.trans ?_ <| hfg.sum_smul_comp_perm_eq_sum_smul_iff hσinv).trans
@@ -218,6 +176,51 @@ theorem MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff (hfg : MonovaryOn f g s)
       exact Set.image_perm hσinv
 #align monovary_on.sum_comp_perm_smul_eq_sum_smul_iff MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff
 
+/-- **Strict inequality case of the Rearrangement Inequality**: Pointwise scalar multiplication of
+`f` and `g`, which monovary together, is strictly decreased by a permutation if and only if
+`f ∘ σ` and `g` do not monovary together. Stated by permuting the entries of `f`. -/
+theorem MonovaryOn.sum_comp_perm_smul_lt_sum_smul_iff (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x ≠ x} ⊆ s) :
+    ∑ i ∈ s, f (σ i) • g i < ∑ i ∈ s, f i • g i ↔ ¬MonovaryOn (f ∘ σ) g s := by
+  simp [← hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ, lt_iff_le_and_ne,
+    hfg.sum_comp_perm_smul_le_sum_smul hσ]
+#align monovary_on.sum_comp_perm_smul_lt_sum_smul_iff MonovaryOn.sum_comp_perm_smul_lt_sum_smul_iff
+
+/-- **Rearrangement Inequality**: Pointwise scalar multiplication of `f` and `g` is minimized when
+`f` and `g` antivary together. Stated by permuting the entries of `g`. -/
+theorem AntivaryOn.sum_smul_le_sum_smul_comp_perm (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x ≠ x} ⊆ s) : ∑ i ∈ s, f i • g i ≤ ∑ i ∈ s, f i • g (σ i) :=
+  hfg.dual_right.sum_smul_comp_perm_le_sum_smul hσ
+#align antivary_on.sum_smul_le_sum_smul_comp_perm AntivaryOn.sum_smul_le_sum_smul_comp_perm
+
+/-- **Equality case of the Rearrangement Inequality**: Pointwise scalar multiplication of `f` and
+`g`, which antivary together, is unchanged by a permutation if and only if `f` and `g ∘ σ` antivary
+together. Stated by permuting the entries of `g`. -/
+theorem AntivaryOn.sum_smul_comp_perm_eq_sum_smul_iff (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x ≠ x} ⊆ s) :
+    ∑ i ∈ s, f i • g (σ i) = ∑ i ∈ s, f i • g i ↔ AntivaryOn f (g ∘ σ) s :=
+  (hfg.dual_right.sum_smul_comp_perm_eq_sum_smul_iff hσ).trans monovaryOn_toDual_right
+#align antivary_on.sum_smul_eq_sum_smul_comp_perm_iff AntivaryOn.sum_smul_comp_perm_eq_sum_smul_iff
+
+/-- **Strict inequality case of the Rearrangement Inequality**: Pointwise scalar multiplication of
+`f` and `g`, which antivary together, is strictly decreased by a permutation if and only if
+`f` and `g ∘ σ` do not antivary together. Stated by permuting the entries of `g`. -/
+theorem AntivaryOn.sum_smul_lt_sum_smul_comp_perm_iff (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x ≠ x} ⊆ s) :
+    ∑ i ∈ s, f i • g i < ∑ i ∈ s, f i • g (σ i) ↔ ¬AntivaryOn f (g ∘ σ) s := by
+  simp [← hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ, lt_iff_le_and_ne, eq_comm,
+    hfg.sum_smul_le_sum_smul_comp_perm hσ]
+#align antivary_on.sum_smul_lt_sum_smul_comp_perm_iff AntivaryOn.sum_smul_lt_sum_smul_comp_perm_iff
+
+/-- **Rearrangement Inequality**: Pointwise scalar multiplication of `f` and `g` is minimized when
+`f` and `g` antivary together. Stated by permuting the entries of `f`. -/
+theorem AntivaryOn.sum_smul_le_sum_comp_perm_smul (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x ≠ x} ⊆ s) : ∑ i ∈ s, f i • g i ≤ ∑ i ∈ s, f (σ i) • g i := by
+  convert hfg.sum_smul_le_sum_smul_comp_perm
+    (show { x | σ⁻¹ x ≠ x } ⊆ s by simp only [set_support_inv_eq, hσ]) using 1
+  exact σ.sum_comp' s (fun i j ↦ f i • g j) hσ
+#align antivary_on.sum_smul_le_sum_comp_perm_smul AntivaryOn.sum_smul_le_sum_comp_perm_smul
+
 /-- **Equality case of the Rearrangement Inequality**: Pointwise scalar multiplication of `f` and
 `g`, which antivary together, is unchanged by a permutation if and only if `f ∘ σ` and `g` antivary
 together. Stated by permuting the entries of `f`. -/
@@ -228,20 +231,10 @@ theorem AntivaryOn.sum_comp_perm_smul_eq_sum_smul_iff (hfg : AntivaryOn f g s)
 #align antivary_on.sum_smul_eq_sum_comp_perm_smul_iff AntivaryOn.sum_comp_perm_smul_eq_sum_smul_iff
 
 /-- **Strict inequality case of the Rearrangement Inequality**: Pointwise scalar multiplication of
-`f` and `g`, which monovary together, is strictly decreased by a permutation if and only if
-`f ∘ σ` and `g` do not monovary together. Stated by permuting the entries of `f`. -/
-theorem MonovaryOn.sum_comp_perm_smul_lt_sum_smul_iff (hfg : MonovaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
-    ∑ i ∈ s, f (σ i) • g i < ∑ i ∈ s, f i • g i ↔ ¬MonovaryOn (f ∘ σ) g s := by
-  simp [← hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ, lt_iff_le_and_ne,
-    hfg.sum_comp_perm_smul_le_sum_smul hσ]
-#align monovary_on.sum_comp_perm_smul_lt_sum_smul_iff MonovaryOn.sum_comp_perm_smul_lt_sum_smul_iff
-
-/-- **Strict inequality case of the Rearrangement Inequality**: Pointwise scalar multiplication of
 `f` and `g`, which antivary together, is strictly decreased by a permutation if and only if
 `f ∘ σ` and `g` do not antivary together. Stated by permuting the entries of `f`. -/
 theorem AntivaryOn.sum_smul_lt_sum_comp_perm_smul_iff (hfg : AntivaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f i • g i < ∑ i ∈ s, f (σ i) • g i ↔ ¬AntivaryOn (f ∘ σ) g s := by
   simp [← hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ, eq_comm, lt_iff_le_and_ne,
     hfg.sum_smul_le_sum_comp_perm_smul hσ]
@@ -356,7 +349,7 @@ variable [LinearOrderedSemiring α] [ExistsAddOfLE α] {s : Finset ι} {σ : Per
 /-- **Rearrangement Inequality**: Pointwise multiplication of `f` and `g` is maximized when `f` and
 `g` monovary together. Stated by permuting the entries of `g`. -/
 theorem MonovaryOn.sum_mul_comp_perm_le_sum_mul (hfg : MonovaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) : ∑ i ∈ s, f i * g (σ i) ≤ ∑ i ∈ s, f i * g i :=
+    (hσ : {x | σ x ≠ x} ⊆ s) : ∑ i ∈ s, f i * g (σ i) ≤ ∑ i ∈ s, f i * g i :=
   hfg.sum_smul_comp_perm_le_sum_smul hσ
 #align monovary_on.sum_mul_comp_perm_le_sum_mul MonovaryOn.sum_mul_comp_perm_le_sum_mul
 
@@ -364,7 +357,7 @@ theorem MonovaryOn.sum_mul_comp_perm_le_sum_mul (hfg : MonovaryOn f g s)
 which monovary together, is unchanged by a permutation if and only if `f` and `g ∘ σ` monovary
 together. Stated by permuting the entries of `g`. -/
 theorem MonovaryOn.sum_mul_comp_perm_eq_sum_mul_iff (hfg : MonovaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f i * g (σ i) = ∑ i ∈ s, f i * g i ↔ MonovaryOn f (g ∘ σ) s :=
   hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ
 #align monovary_on.sum_mul_comp_perm_eq_sum_mul_iff MonovaryOn.sum_mul_comp_perm_eq_sum_mul_iff
@@ -373,7 +366,7 @@ theorem MonovaryOn.sum_mul_comp_perm_eq_sum_mul_iff (hfg : MonovaryOn f g s)
 `f` and `g`, which monovary together, is strictly decreased by a permutation if and only if
 `f` and `g ∘ σ` do not monovary together. Stated by permuting the entries of `g`. -/
 theorem MonovaryOn.sum_mul_comp_perm_lt_sum_mul_iff (hfg : MonovaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f i • g (σ i) < ∑ i ∈ s, f i • g i ↔ ¬MonovaryOn f (g ∘ σ) s :=
   hfg.sum_smul_comp_perm_lt_sum_smul_iff hσ
 #align monovary_on.sum_mul_comp_perm_lt_sum_mul_iff MonovaryOn.sum_mul_comp_perm_lt_sum_mul_iff
@@ -381,7 +374,7 @@ theorem MonovaryOn.sum_mul_comp_perm_lt_sum_mul_iff (hfg : MonovaryOn f g s)
 /-- **Rearrangement Inequality**: Pointwise multiplication of `f` and `g` is maximized when `f` and
 `g` monovary together. Stated by permuting the entries of `f`. -/
 theorem MonovaryOn.sum_comp_perm_mul_le_sum_mul (hfg : MonovaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) : ∑ i ∈ s, f (σ i) * g i ≤ ∑ i ∈ s, f i * g i :=
+    (hσ : {x | σ x ≠ x} ⊆ s) : ∑ i ∈ s, f (σ i) * g i ≤ ∑ i ∈ s, f i * g i :=
   hfg.sum_comp_perm_smul_le_sum_smul hσ
 #align monovary_on.sum_comp_perm_mul_le_sum_mul MonovaryOn.sum_comp_perm_mul_le_sum_mul
 
@@ -389,7 +382,7 @@ theorem MonovaryOn.sum_comp_perm_mul_le_sum_mul (hfg : MonovaryOn f g s)
 which monovary together, is unchanged by a permutation if and only if `f ∘ σ` and `g` monovary
 together. Stated by permuting the entries of `f`. -/
 theorem MonovaryOn.sum_comp_perm_mul_eq_sum_mul_iff (hfg : MonovaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f (σ i) * g i = ∑ i ∈ s, f i * g i ↔ MonovaryOn (f ∘ σ) g s :=
   hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ
 #align monovary_on.sum_comp_perm_mul_eq_sum_mul_iff MonovaryOn.sum_comp_perm_mul_eq_sum_mul_iff
@@ -398,7 +391,7 @@ theorem MonovaryOn.sum_comp_perm_mul_eq_sum_mul_iff (hfg : MonovaryOn f g s)
 `f` and `g`, which monovary together, is strictly decreased by a permutation if and only if
 `f ∘ σ` and `g` do not monovary together. Stated by permuting the entries of `f`. -/
 theorem MonovaryOn.sum_comp_perm_mul_lt_sum_mul_iff (hfg : MonovaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f (σ i) * g i < ∑ i ∈ s, f i * g i ↔ ¬MonovaryOn (f ∘ σ) g s :=
   hfg.sum_comp_perm_smul_lt_sum_smul_iff hσ
 #align monovary_on.sum_comp_perm_mul_lt_sum_mul_iff MonovaryOn.sum_comp_perm_mul_lt_sum_mul_iff
@@ -406,7 +399,7 @@ theorem MonovaryOn.sum_comp_perm_mul_lt_sum_mul_iff (hfg : MonovaryOn f g s)
 /-- **Rearrangement Inequality**: Pointwise multiplication of `f` and `g` is minimized when `f` and
 `g` antivary together. Stated by permuting the entries of `g`. -/
 theorem AntivaryOn.sum_mul_le_sum_mul_comp_perm (hfg : AntivaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) : ∑ i ∈ s, f i * g i ≤ ∑ i ∈ s, f i * g (σ i) :=
+    (hσ : {x | σ x ≠ x} ⊆ s) : ∑ i ∈ s, f i * g i ≤ ∑ i ∈ s, f i * g (σ i) :=
   hfg.sum_smul_le_sum_smul_comp_perm hσ
 #align antivary_on.sum_mul_le_sum_mul_comp_perm AntivaryOn.sum_mul_le_sum_mul_comp_perm
 
@@ -414,7 +407,7 @@ theorem AntivaryOn.sum_mul_le_sum_mul_comp_perm (hfg : AntivaryOn f g s)
 which antivary together, is unchanged by a permutation if and only if `f` and `g ∘ σ` antivary
 together. Stated by permuting the entries of `g`. -/
 theorem AntivaryOn.sum_mul_eq_sum_mul_comp_perm_iff (hfg : AntivaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f i * g (σ i) = ∑ i ∈ s, f i * g i ↔ AntivaryOn f (g ∘ σ) s :=
   hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ
 #align antivary_on.sum_mul_eq_sum_mul_comp_perm_iff AntivaryOn.sum_mul_eq_sum_mul_comp_perm_iff
@@ -423,7 +416,7 @@ theorem AntivaryOn.sum_mul_eq_sum_mul_comp_perm_iff (hfg : AntivaryOn f g s)
 `f` and `g`, which antivary together, is strictly decreased by a permutation if and only if
 `f` and `g ∘ σ` do not antivary together. Stated by permuting the entries of `g`. -/
 theorem AntivaryOn.sum_mul_lt_sum_mul_comp_perm_iff (hfg : AntivaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f i * g i < ∑ i ∈ s, f i * g (σ i) ↔ ¬AntivaryOn f (g ∘ σ) s :=
   hfg.sum_smul_lt_sum_smul_comp_perm_iff hσ
 #align antivary_on.sum_mul_lt_sum_mul_comp_perm_iff AntivaryOn.sum_mul_lt_sum_mul_comp_perm_iff
@@ -431,7 +424,7 @@ theorem AntivaryOn.sum_mul_lt_sum_mul_comp_perm_iff (hfg : AntivaryOn f g s)
 /-- **Rearrangement Inequality**: Pointwise multiplication of `f` and `g` is minimized when `f` and
 `g` antivary together. Stated by permuting the entries of `f`. -/
 theorem AntivaryOn.sum_mul_le_sum_comp_perm_mul (hfg : AntivaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) : ∑ i ∈ s, f i * g i ≤ ∑ i ∈ s, f (σ i) * g i :=
+    (hσ : {x | σ x ≠ x} ⊆ s) : ∑ i ∈ s, f i * g i ≤ ∑ i ∈ s, f (σ i) * g i :=
   hfg.sum_smul_le_sum_comp_perm_smul hσ
 #align antivary_on.sum_mul_le_sum_comp_perm_mul AntivaryOn.sum_mul_le_sum_comp_perm_mul
 
@@ -439,7 +432,7 @@ theorem AntivaryOn.sum_mul_le_sum_comp_perm_mul (hfg : AntivaryOn f g s)
 which antivary together, is unchanged by a permutation if and only if `f ∘ σ` and `g` antivary
 together. Stated by permuting the entries of `f`. -/
 theorem AntivaryOn.sum_comp_perm_mul_eq_sum_mul_iff (hfg : AntivaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f (σ i) * g i = ∑ i ∈ s, f i * g i ↔ AntivaryOn (f ∘ σ) g s :=
   hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ
 #align antivary_on.sum_mul_eq_sum_comp_perm_mul_iff AntivaryOn.sum_comp_perm_mul_eq_sum_mul_iff
@@ -448,7 +441,7 @@ theorem AntivaryOn.sum_comp_perm_mul_eq_sum_mul_iff (hfg : AntivaryOn f g s)
 `f` and `g`, which antivary together, is strictly decreased by a permutation if and only if
 `f ∘ σ` and `g` do not antivary together. Stated by permuting the entries of `f`. -/
 theorem AntivaryOn.sum_mul_lt_sum_comp_perm_mul_iff (hfg : AntivaryOn f g s)
-    (hσ : { x | σ x ≠ x } ⊆ s) :
+    (hσ : {x | σ x ≠ x} ⊆ s) :
     ∑ i ∈ s, f i * g i < ∑ i ∈ s, f (σ i) * g i ↔ ¬AntivaryOn (f ∘ σ) g s :=
   hfg.sum_smul_lt_sum_comp_perm_smul_iff hσ
 #align antivary_on.sum_mul_lt_sum_comp_perm_mul_iff AntivaryOn.sum_mul_lt_sum_comp_perm_mul_iff

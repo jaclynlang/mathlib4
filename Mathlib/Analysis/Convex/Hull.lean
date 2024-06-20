@@ -217,10 +217,13 @@ theorem affineSpan_convexHull (s : Set E) : affineSpan 𝕜 (convexHull 𝕜 s) 
   exact convexHull_subset_affineSpan s
 #align affine_span_convex_hull affineSpan_convexHull
 
-theorem convexHull_neg (s : Set E) : -convexHull 𝕜 s = convexHull 𝕜 (-s) := by
+theorem convexHull_neg (s : Set E) : convexHull 𝕜 (-s) = -convexHull 𝕜 s := by
   simp_rw [← image_neg]
-  exact AffineMap.image_convexHull (-1) _
+  exact AffineMap.image_convexHull (-1) _ |>.symm
 #align convex_hull_neg convexHull_neg
+
+lemma convexHull_vadd (x : E) (s : Set E) : convexHull 𝕜 (x +ᵥ s) = x +ᵥ convexHull 𝕜 s :=
+  (AffineEquiv.constVAdd 𝕜 _ x).toAffineMap.image_convexHull s |>.symm
 
 end AddCommGroup
 

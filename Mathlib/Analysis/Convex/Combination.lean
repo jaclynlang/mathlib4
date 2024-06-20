@@ -5,8 +5,6 @@ Authors: Yury Kudriashov
 -/
 import Mathlib.Algebra.Order.BigOperators.Ring.Finset
 import Mathlib.Analysis.Convex.Hull
-import Mathlib.Data.Countable.Small
-import Mathlib.Data.Fintype.Shrink
 import Mathlib.LinearAlgebra.AffineSpace.Basis
 
 #align_import analysis.convex.combination from "leanprover-community/mathlib"@"92bd7b1ffeb306a89f450bee126ddd8a284c259d"

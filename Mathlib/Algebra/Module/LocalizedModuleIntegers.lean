@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Christian Merten
 -/
 import Mathlib.Algebra.Module.LocalizedModule
+import Mathlib.Algebra.Module.Submodule.Pointwise
 
 /-!
 
@@ -119,5 +120,25 @@ theorem finsetIntegerMultiple_image [DecidableEq M] (s : Finset M') :
     exact Set.mem_image_of_mem _ x.prop
   · rintro ⟨x, hx, rfl⟩
     exact ⟨_, ⟨⟨x, hx⟩, s.mem_attach _, rfl⟩, map_integerMultiple S f s id _⟩
+
+theorem smul_mem_finsetIntegerMultiple_span [DecidableEq M] (x : M) (s : Finset M')
+    (hx : f x ∈ Submodule.span R s) :
+    ∃ (m : S), m • x ∈ Submodule.span R (IsLocalizedModule.finsetIntegerMultiple S f s) := by
+  let y : S := IsLocalizedModule.commonDenomOfFinset S f s
+  have hx₁ : (y : R) • (s : Set M') = f '' _ :=
+    (IsLocalizedModule.finsetIntegerMultiple_image S f s).symm
+  apply congrArg (Submodule.span R) at hx₁
+  rw [Submodule.span_smul] at hx₁
+  replace hx : _ ∈ y • Submodule.span R (s : Set M') := Set.smul_mem_smul_set hx
+  erw [hx₁, ← f.map_smul, ← Submodule.map_span f] at hx
+  obtain ⟨x', hx', hx''⟩ := hx
+  obtain ⟨a, ha⟩ := (IsLocalizedModule.eq_iff_exists S f).mp hx''
+  use a * y
+  convert (Submodule.span R
+    (IsLocalizedModule.finsetIntegerMultiple S f s : Set M)).smul_mem
+      a hx' using 1
+  convert ha.symm using 1
+  simp only [Submonoid.coe_subtype, Submonoid.smul_def]
+  erw [← smul_smul]
 
 end IsLocalizedModule

@@ -6,25 +6,25 @@ Authors: Christian Merten
 import Mathlib.Algebra.Module.LocalizedModule
 
 /-!
-# Integer elements of a localization
+
+# Integer elements of a localized module
+
+This is a mirror of the corresponding notion for localizations of rings.
 
 ## Main definitions
 
- * `IsLocalization.IsInteger` is a predicate stating that `x : S` is in the image of `R`
+ * `IsLocalizedModule.IsInteger` is a predicate stating that `m : M'` is in the image of `M`
 
-## Implementation notes
+## Implementation details
 
-See `RingTheory/Localization/Basic.lean` for a design overview.
+After `IsLocalizedModule` and `IsLocalization` are unified, the two `IsInteger` predicates
+can be unified.
 
-## Tags
-localization, ring localization, commutative ring localization, characteristic predicate,
-commutative ring, field of fractions
 -/
 
 
 variable {R : Type*} [CommSemiring R] {S : Submonoid R} {M : Type*} [AddCommMonoid M]
-variable [Module R M]-- {P : Type*} [CommSemiring P]
-variable {M' : Type*} [AddCommMonoid M'] [Module R M'] (f : M →ₗ[R] M')
+  [Module R M] {M' : Type*} [AddCommMonoid M'] [Module R M'] (f : M →ₗ[R] M')
 
 open Function
 
@@ -32,39 +32,28 @@ namespace IsLocalizedModule
 
 section
 
-/-- Given `a : S`, `S` a localization of `R`, `IsInteger R a` iff `a` is in the image of
-the localization map from `R` to `S`. -/
-def IsInteger (m : M') : Prop :=
-  m ∈ LinearMap.range f
+/-- Given `x : M'`, `M'` a localization of `M` via `f`, `IsInteger f x` iff `x` is in the image of
+the localization map `f`. -/
+def IsInteger (x : M') : Prop :=
+  x ∈ LinearMap.range f
 
 end
 
-/-
-theorem isInteger_zero : IsInteger R (0 : S) :=
-  Subsemiring.zero_mem _
+lemma isInteger_zero : IsInteger f (0 : M') :=
+  Submodule.zero_mem _
 
-theorem isInteger_one : IsInteger R (1 : S) :=
-  Subsemiring.one_mem _
+theorem isInteger_add {x y : M'} (hx : IsInteger f x) (hy : IsInteger f y) : IsInteger f (x + y) :=
+  Submodule.add_mem _ hx hy
 
-theorem isInteger_add {a b : S} (ha : IsInteger R a) (hb : IsInteger R b) : IsInteger R (a + b) :=
-  Subsemiring.add_mem _ ha hb
-
-theorem isInteger_mul {a b : S} (ha : IsInteger R a) (hb : IsInteger R b) : IsInteger R (a * b) :=
-  Subsemiring.mul_mem _ ha hb
-
-theorem isInteger_smul {a : R} {b : S} (hb : IsInteger R b) : IsInteger R (a • b) := by
-  rcases hb with ⟨b', hb⟩
-  use a * b'
-  rw [← hb, (algebraMap R S).map_mul, Algebra.smul_def]
--/
+theorem isInteger_smul {a : R} {x : M'} (hx : IsInteger f x) : IsInteger f (a • x) := by
+  rcases hx with ⟨x', hx⟩
+  use a • x'
+  rw [← hx, LinearMapClass.map_smul]
 
 variable (S)
 variable [IsLocalizedModule S f]
 
-/-- Each element `a : S` has an `M`-multiple which is an integer.
-
-This version multiplies `a` on the right, matching the argument order in `LocalizationMap.surj`.
--/
+/-- Each element `x : M'` has an `S`-multiple which is an integer. -/
 theorem exists_integer_multiple (x : M') : ∃ a : S, IsInteger f (a.val • x) :=
   let ⟨⟨Num, denom⟩, h⟩ := IsLocalizedModule.surj S f x
   ⟨denom, Set.mem_range.mpr ⟨Num, h.symm⟩⟩
@@ -73,16 +62,15 @@ theorem exists_integer_multiple (x : M') : ∃ a : S, IsInteger f (a.val • x) 
 theorem exist_integer_multiples {ι : Type*} (s : Finset ι) (g : ι → M') :
     ∃ b : S, ∀ i ∈ s, IsInteger f (b.val • g i) := by
   classical
-  have (i : ι) := IsLocalizedModule.surj S f (g i)
-  choose sec hsec using this
+  choose sec hsec using (fun i ↦ IsLocalizedModule.surj S f (g i))
   refine ⟨∏ i ∈ s, (sec i).2, fun i hi => ⟨?_, ?_⟩⟩
   · exact (∏ j ∈ s.erase i, (sec j).2) • (sec i).1
-  simp only [LinearMap.map_smul_of_tower, Submonoid.coe_finset_prod]
-  rw [← hsec, ← mul_smul, Submonoid.smul_def]
-  congr
-  simp only [Submonoid.coe_mul, Submonoid.coe_finset_prod, mul_comm]
-  rw [← Finset.prod_insert (f := fun i ↦ ((sec i).snd).val) (s.not_mem_erase i)]
-  rw [Finset.insert_erase hi]
+  · simp only [LinearMap.map_smul_of_tower, Submonoid.coe_finset_prod]
+    rw [← hsec, ← mul_smul, Submonoid.smul_def]
+    congr
+    simp only [Submonoid.coe_mul, Submonoid.coe_finset_prod, mul_comm]
+    rw [← Finset.prod_insert (f := fun i ↦ ((sec i).snd).val) (s.not_mem_erase i),
+      Finset.insert_erase hi]
 
 /-- We can clear the denominators of a finite indexed family of fractions. -/
 theorem exist_integer_multiples_of_finite {ι : Type*} [Finite ι] (g : ι → M') :

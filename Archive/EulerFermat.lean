@@ -162,7 +162,7 @@ theorem H3 (a n : ℕ) (ha : 1 < a) (hn : 1 < n)
           rw [← Nat.mul_comm (n / ord_proj[2] n) (ord_proj[2] n)] at h₂
           rw [Nat.div_mul_cancel (ord_proj_dvd n 2), mul_one] at h₂
           exact Nat.ne_of_lt h₂
-    . exact hP
+    · exact hP
   /- Having excluded the other case, only the possibility remains that `n` is a
     power of two. -/
   exact h₁

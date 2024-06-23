@@ -147,7 +147,7 @@ theorem H3 (a n : ℕ) (ha : 1 < a) (hn : 1 < n)
           apply pow_ne_zero
           exact not_eq_zero_of_lt ha
           /- With this we proved our divisor is not 1. -/
-        . /- To show that the divisor does not equal `a^n+1` it suffices to show
+        · /- To show that the divisor does not equal `a^n+1` it suffices to show
             that the even part of `n` is not equal to `n`, i.e., that `n` is not
             a power of two. But we have excluded that possibility by setting
             `n` as of form `m₁ * (2 * m₂ + 1)`, `m₁, m₂ > 0`, which is `h₂`.

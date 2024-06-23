@@ -141,7 +141,7 @@ theorem H3 (a n : ℕ) (ha : 1 < a) (hn : 1 < n)
         apply H2 a (m := (ord_compl[2] n - 1) / 2) (p := ord_proj[2] n)
         exact zero_lt_of_lt ha
         /- And we applied lemma `H2` to prove our divisor. -/
-      . constructor
+      · constructor
         /- The constructor splits off the second and third subgoal. -/
         . rw [add_left_ne_self]
           apply pow_ne_zero

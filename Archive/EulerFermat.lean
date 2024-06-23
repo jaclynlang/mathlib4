@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2024 Ralf Stephan. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Ralf Stephan
+-/
 import Mathlib
 
 set_option autoImplicit false
@@ -11,7 +16,6 @@ the proof outlined in three sentences by Euler in the year 1738 [E026]. A proof 
 found in Hardy & Wright, An introduction to the theory of numbers (5th ed., 1979),
 p.15, Theorem 17. In the proof below we followed Euler's thoughts.
 -/
-
 
 lemma simplify1 (a m' : ℕ) (ha : a > 0) :
     a ^ (2 * m' + 1) + 1 + (a + 1) * (a ^ (2 * m' + 2) - a ^ (2 * m' + 1)) =
@@ -78,9 +82,9 @@ lemma ord_compl_of_pow (m n p: ℕ) (hp : p.Prime) (hn : n = p ^ m) : ord_compl[
   exact hp
 
 /- `n` is a power of `p` only if the odd part of `p ^ m` is 1. -/
-lemma ord_pow_of_compl (n p: ℕ) (hnop : ord_compl[p] n = 1)
-    : ∃ m : ℕ, n = p ^ m := by
-  have h : p ^ n.factorization p * (n / p ^ n.factorization p) = n := ord_proj_mul_ord_compl_eq_self n p
+lemma ord_pow_of_compl (n p: ℕ) (hnop : ord_compl[p] n = 1) : ∃ m : ℕ, n = p ^ m := by
+  have h : p ^ n.factorization p * (n / p ^ n.factorization p) = n :=
+    ord_proj_mul_ord_compl_eq_self n p
   use n.factorization p
   rw [hnop, mul_one] at h
   exact h.symm

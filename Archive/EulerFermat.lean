@@ -6,6 +6,8 @@ Authors: Ralf Stephan
 import Mathlib
 
 /-!
+# a^n+1 is prime only if n is a power of two
+
 The fact that primes of the form `a^n+1` must have `n` a power of two was stated and
 the proof outlined in three sentences by Euler in the year 1738 [E026]. A proof can be
 found in Hardy & Wright, An introduction to the theory of numbers (5th ed., 1979),

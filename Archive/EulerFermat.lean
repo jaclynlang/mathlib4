@@ -136,7 +136,7 @@ theorem H3 (a n : ℕ) (ha : 1 < a) (hn : 1 < n)
       /- We set `a^p+1` as the divisor, with `p` the even part of `n`. -/
       constructor
       /- The constructor splits off the first subgoal. -/
-      . nth_rewrite 2 [← simplify2 n (not_eq_zero_of_lt hn)]
+      · nth_rewrite 2 [← simplify2 n (not_eq_zero_of_lt hn)]
         /- We rewrite the divisor to match the lemma `H2` we proved earlier. -/
         apply H2 a (m := (ord_compl[2] n - 1) / 2) (p := ord_proj[2] n)
         exact zero_lt_of_lt ha

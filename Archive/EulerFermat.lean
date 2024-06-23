@@ -132,7 +132,7 @@ theorem H3 (a n : ℕ) (ha : 1 < a) (hn : 1 < n)
        From assuming `a^n+1` is not prime follows that we need to prove a proper
        divisor exists, creating the subgoals that it divides `a^n+1`, that it is
        not 1, and that it is not equal to `a^n+1`. -/
-    . use a ^ ord_proj[2] n + 1
+    · use a ^ ord_proj[2] n + 1
       /- We set `a^p+1` as the divisor, with `p` the even part of `n`. -/
       constructor
       /- The constructor splits off the first subgoal. -/

@@ -10,6 +10,7 @@ import Mathlib.RingTheory.Localization.Away.AdjoinRoot
 import Mathlib.Algebra.Module.LocalizedModule
 import Mathlib.RingTheory.RingHom.FiniteType
 import Mathlib.RingTheory.Localization.Finiteness
+import Mathlib.RingTheory.MvPolynomial.Localization
 
 /-!
 
@@ -18,10 +19,6 @@ import Mathlib.RingTheory.Localization.Finiteness
 The main result is `RingHom.finitePresentation_is_local`.
 
 -/
-
-section
-
-end
 
 section
 
@@ -89,93 +86,7 @@ end
 
 section
 
-@[to_additive]
-lemma Finset.prod_eq' {α β : Type*} [CommMonoid β] {s : Finset α} {f : α → β}
-    {b₁ b₂ : β}
-    (h : ∃ a ∈ s, f a * b₁ = f a * b₂) :
-    (∏ a ∈ s, f a) * b₁ = (∏ a ∈ s, f a) * b₂ := by
-  obtain ⟨a, ha, h⟩ := h
-  classical
-  rw [← insert_erase ha]
-  simp only [mem_erase, ne_eq, not_true_eq_false, false_and, not_false_eq_true, prod_insert]
-  rw [mul_assoc, mul_comm, mul_assoc, mul_comm b₁, h, ← mul_assoc, mul_comm _ (f a)]
-
-@[to_additive]
-lemma Finsupp.prod_eq' {α M N : Type*} [Zero M] [CommMonoid N] {f : α →₀ M}
-    {g : α → M → N} {n₁ n₂ : N} (h : ∃ a ∈ f.support, g a (f a) * n₁ = g a (f a) * n₂) :
-    f.prod g * n₁ = f.prod g * n₂ :=
-  Finset.prod_eq' h
-
-end
-
-section
-
-variable {R S σ : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S]
-
-noncomputable instance : Algebra (MvPolynomial σ R) (MvPolynomial σ S) :=
-  (MvPolynomial.map (algebraMap R S)).toAlgebra
-
-@[simp]
-lemma MvPolynomial.algebraMap_def :
-    algebraMap (MvPolynomial σ R) (MvPolynomial σ S) = MvPolynomial.map (algebraMap R S) :=
-  rfl
-
-end
-
 open scoped Pointwise TensorProduct
-
-instance MvPolynomial.isLocalization {σ R : Type*} [CommRing R] (M : Submonoid R)
-    (S : Type*) [CommRing S] [Algebra R S] [IsLocalization M S] :
-    IsLocalization (Submonoid.map (MvPolynomial.C (σ := σ)) M) (MvPolynomial σ S) where
-  map_units' := by
-    rintro ⟨p, q, hq, rfl⟩
-    simp only [algebraMap_def, MvPolynomial.map_C]
-    exact IsUnit.map _ (IsLocalization.map_units _ ⟨q, hq⟩)
-  surj' p := by
-    simp only [algebraMap_def, Prod.exists, Subtype.exists,
-      Submonoid.mem_map, exists_prop, exists_exists_and_eq_and, MvPolynomial.map_C]
-    refine MvPolynomial.induction_on' p ?_ ?_
-    · intro u s
-      obtain ⟨⟨r, m⟩, hr⟩ := IsLocalization.surj M s
-      use MvPolynomial.monomial u r, m, m.property
-      simp only [MvPolynomial.map_monomial]
-      rw [← hr, mul_comm, MvPolynomial.C_mul_monomial, mul_comm]
-    · intro p p' ⟨x, m, hm, hxm⟩ ⟨x', m', hm', hxm'⟩
-      use x * (MvPolynomial.C m') + x' * (MvPolynomial.C m), m * m', Submonoid.mul_mem _ hm hm'
-      simp only [map_mul, map_add, MvPolynomial.map_C]
-      rw [add_mul, ← mul_assoc, hxm, ← mul_assoc, ← hxm, ← hxm']
-      ring
-  exists_of_eq {p q} := by
-    intro h
-    simp at h
-    simp_rw [MvPolynomial.ext_iff, MvPolynomial.coeff_map] at h
-    choose c hc using (fun m ↦ IsLocalization.exists_of_eq (M := M) (h m))
-    simp only [Subtype.exists, Submonoid.mem_map, exists_prop, exists_exists_and_eq_and]
-    classical
-    refine ⟨Finset.prod (p.support ∪ q.support) (fun m ↦ c m), ?_, ?_⟩
-    · exact M.prod_mem (fun m _ ↦ (c m).property)
-    · ext m
-      simp only [MvPolynomial.coeff_C_mul]
-      by_cases h : m ∈ p.support ∪ q.support
-      · apply Finset.prod_eq'
-        use m, h, hc m
-      · simp at h
-        rw [h.left, h.right]
-
-lemma MvPolynomial.isLocalization_C_mk' {σ R : Type*} [CommRing R] (M : Submonoid R)
-    (S : Type*) [CommRing S] [Algebra R S] [IsLocalization M S]
-    (a : R) (m : M) :
-    MvPolynomial.C (IsLocalization.mk' S a m) =
-      IsLocalization.mk' (MvPolynomial σ S) (MvPolynomial.C (σ := σ) a)
-      ⟨MvPolynomial.C m, Submonoid.mem_map_of_mem MvPolynomial.C m.property⟩ := by
-  simp_rw [IsLocalization.eq_mk'_iff_mul_eq, algebraMap_def, map_C, ← map_mul,
-    IsLocalization.mk'_spec]
-
-@[simp]
-lemma MvPolynomial.algHom_C' {R S σ : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S]
-    (f : MvPolynomial σ R →ₐ[R] S) (r : R) :
-    f (MvPolynomial.C r) = algebraMap R S r := by
-  rw [← MvPolynomial.algebraMap_eq, AlgHom.map_algebraMap]
 
 namespace RingHom
 

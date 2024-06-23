@@ -143,7 +143,7 @@ theorem H3 (a n : ℕ) (ha : 1 < a) (hn : 1 < n)
         /- And we applied lemma `H2` to prove our divisor. -/
       · constructor
         /- The constructor splits off the second and third subgoal. -/
-        . rw [add_left_ne_self]
+        · rw [add_left_ne_self]
           apply pow_ne_zero
           exact not_eq_zero_of_lt ha
           /- With this we proved our divisor is not 1. -/

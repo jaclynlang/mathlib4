@@ -5,17 +5,14 @@ Authors: Ralf Stephan
 -/
 import Mathlib
 
-set_option autoImplicit false
-set_option relaxedAutoImplicit false
-
-open Nat
-
-/-
+/-!
 The fact that primes of the form `a^n+1` must have `n` a power of two was stated and
 the proof outlined in three sentences by Euler in the year 1738 [E026]. A proof can be
 found in Hardy & Wright, An introduction to the theory of numbers (5th ed., 1979),
 p.15, Theorem 17. In the proof below we followed Euler's thoughts.
 -/
+
+open Nat
 
 lemma simplify1 (a m' : ℕ) (ha : a > 0) :
     a ^ (2 * m' + 1) + 1 + (a + 1) * (a ^ (2 * m' + 2) - a ^ (2 * m' + 1)) =
@@ -48,8 +45,7 @@ lemma simplify1 (a m' : ℕ) (ha : a > 0) :
     _ = a ^ (2 * m' + 3) + 1 := by
       exact Nat.add_comm 1 (a ^ (2 * m' + 3))
 
--- "$a^{2m+1}+1$ can be divided by $a+1$" [Euler, E026]
--- Proof by induction
+/-- "$a^{2m+1}+1$ can be divided by $a+1$" [Euler, E026]. Proof by induction. -/
 theorem H1 (a m : ℕ) (ha : a > 0) : (a + 1) ∣ a ^ (2 * m + 1) + 1 := by
   have h₃ (a m' : ℕ) : a ^ (2 * m' + 2 + 1) = a ^ (2 * m' + 3) := by ring_nf
   have hdvd (a m' : ℕ) : (a + 1) ∣ (a + 1) * (a ^ (2 * m' + 2) - a ^ (2 * m' + 1)) :=
@@ -61,13 +57,12 @@ theorem H1 (a m : ℕ) (ha : a > 0) : (a + 1) ∣ a ^ (2 * m + 1) + 1 := by
     rw [Nat.mul_succ, h₃ a m', ← simplify1 a m' ha]
     exact dvd_add ih (hdvd a m')
 
--- "$a^p+1$ divides $a^{p(2m+1)}+1$" [Euler, E026]
--- Substitute $a$ for $a^p$ in the above.
+/-- "$a^p+1$ divides $a^{p(2m+1)}+1$" [Euler, E026]. Substitute $a$ for $a^p$ in the above. -/
 lemma H2 (a m p: ℕ) (ha : a > 0) : (a ^ p + 1) ∣ a ^ (p * (2 * m + 1)) + 1 := by
   rw [pow_mul a p (2 * m + 1)]
   exact H1 (a ^ p) m (pos_pow_of_pos p ha)
 
-/- The odd part of `n > 0` is either 1, or is `∈ [1, n)`. -/
+/-- The odd part of `n > 0` is either 1, or is `∈ [1, n)`. -/
 lemma ord_compl_eq_or_lt (n p : ℕ) (hn : 0 < n) :
     ord_compl[p] n = 1 ∨ (1 < ord_compl[p] n ∧ n ≥ ord_compl[p] n) := by
   have h (n m : ℕ) (hn1 : n ≤ m) (hn2 : 1 ≤ n) : n = 1 ∨ (1 < n ∧ m ≥ n) := by omega
@@ -75,13 +70,13 @@ lemma ord_compl_eq_or_lt (n p : ℕ) (hn : 0 < n) :
   · apply ord_compl_le n
   · apply ord_compl_pos p (not_eq_zero_of_lt hn)
 
-/- With respect to prime `p`, the odd part of `p ^ m` is 1 only if `n` is a power of `p`. -/
+/-- With respect to prime `p`, the odd part of `p ^ m` is 1 only if `n` is a power of `p`. -/
 lemma ord_compl_of_pow (m n p: ℕ) (hp : p.Prime) (hn : n = p ^ m) : ord_compl[p] n = 1 := by
   rw [hn, Prime.factorization_pow, Finsupp.single_eq_same]
   simp only [Prime.pos hp, ofNat_pos, pow_pos, Nat.div_self]
   exact hp
 
-/- `n` is a power of `p` only if the odd part of `p ^ m` is 1. -/
+/-- `n` is a power of `p` only if the odd part of `p ^ m` is 1. -/
 lemma ord_pow_of_compl (n p: ℕ) (hnop : ord_compl[p] n = 1) : ∃ m : ℕ, n = p ^ m := by
   have h : p ^ n.factorization p * (n / p ^ n.factorization p) = n :=
     ord_proj_mul_ord_compl_eq_self n p
@@ -104,8 +99,8 @@ lemma simplify2 (n : ℕ) (hn : n ≠ 0) :
     _ = n := by
       rw [ord_proj_mul_ord_compl_eq_self]
 
--- "if any numbers of the form $a^n+1$ are prime, it is necessary,
---  that they be of the form $a^{2^m}+1$" [Euler, E026]
+/-- "If any numbers of the form $a^n+1$ are prime, it is necessary, that they be of the
+  form $a^{2^m}+1$" [Euler, E026] -/
 theorem H3 (a n : ℕ) (ha : 1 < a) (hn : 1 < n)
     (hP : Nat.Prime (a ^ n + 1)) : ∃ m : ℕ, n = 2 ^ m := by
   /- First we show that the goal `n = 2 ^ m` is equivalent to the statement

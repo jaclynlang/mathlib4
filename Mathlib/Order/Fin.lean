@@ -303,7 +303,7 @@ map. In this lemma we state that for each `i : Fin n` we have `(e i : ℕ) = (i 
 instance orderIso_subsingleton : Subsingleton (Fin n ≃o α) :=
   ⟨fun e e' => by
     ext i
-    rw [← e.symm.apply_eq_iff_eq, e.symm_apply_apply, ← e'.trans_apply, ext_iff,
+    rw [← e.symm.apply_eq_iff_eq, e.symm_apply_apply, ← e'.trans_apply, Fin.ext_iff,
       coe_orderIso_apply]⟩
 #align fin.order_iso_subsingleton Fin.orderIso_subsingleton
 
@@ -318,12 +318,12 @@ are equal. -/
 lemma strictMono_unique {f g : Fin n → α} (hf : StrictMono f) (hg : StrictMono g)
     (h : range f = range g) : f = g :=
   have : (hf.orderIso f).trans (OrderIso.setCongr _ _ h) = hg.orderIso g := Subsingleton.elim _ _
-  congr_arg (Function.comp (Subtype.val : range g → α)) (funext <| RelIso.ext_iff.1 this)
+  congr_arg (Function.comp (Subtype.val : range g → α)) (funext <| RelIso.ext_iff .. |>.1 this)
 #align fin.strict_mono_unique Fin.strictMono_unique
 
 /-- Two order embeddings of `Fin n` are equal provided that their ranges are equal. -/
 lemma orderEmbedding_eq {f g : Fin n ↪o α} (h : range f = range g) : f = g :=
-  RelEmbedding.ext <| funext_iff.1 <| strictMono_unique f.strictMono g.strictMono h
+  RelEmbedding.ext <| congr_fun <| strictMono_unique f.strictMono g.strictMono h
 #align fin.order_embedding_eq Fin.orderEmbedding_eq
 
 end Fin

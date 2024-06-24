@@ -63,7 +63,7 @@ def MulSemiringAction.toRingHom [MulSemiringAction M R] (x : M) : R →+* R :=
 
 theorem toRingHom_injective [MulSemiringAction M R] [FaithfulSMul M R] :
     Function.Injective (MulSemiringAction.toRingHom M R) := fun _ _ h =>
-  eq_of_smul_eq_smul fun r => RingHom.ext_iff.1 h r
+  eq_of_smul_eq_smul <| (RingHom.ext_iff ..).1 h
 #align to_ring_hom_injective toRingHom_injective
 
 /-- The tautological action by `R →+* R` on `R`.

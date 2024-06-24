@@ -176,6 +176,7 @@ protected theorem map_add (e : R ≃+* S) (x y : R) : e (x + y) = e x + e y :=
 theorem ext {f g : R ≃+* S} (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext f g h
 #align ring_equiv.ext RingEquiv.ext
+#align ring_equiv.ext_iff RingEquiv.ext_iff
 
 @[simp]
 theorem coe_mk (e h₃ h₄) : ⇑(⟨e, h₃, h₄⟩ : R ≃+* S) = e :=
@@ -197,10 +198,6 @@ protected theorem congr_arg {f : R ≃+* S} {x x' : R} : x = x' → f x = f x' :
 protected theorem congr_fun {f g : R ≃+* S} (h : f = g) (x : R) : f x = g x :=
   DFunLike.congr_fun h x
 #align ring_equiv.congr_fun RingEquiv.congr_fun
-
-protected theorem ext_iff {f g : R ≃+* S} : f = g ↔ ∀ x, f x = g x :=
-  DFunLike.ext_iff
-#align ring_equiv.ext_iff RingEquiv.ext_iff
 
 @[simp]
 theorem toAddEquiv_eq_coe (f : R ≃+* S) : f.toAddEquiv = ↑f :=
@@ -625,7 +622,7 @@ def toNonUnitalRingHom (e : R ≃+* S) : R →ₙ+* S :=
 
 theorem toNonUnitalRingHom_injective :
     Function.Injective (toNonUnitalRingHom : R ≃+* S → R →ₙ+* S) := fun _ _ h =>
-  RingEquiv.ext (NonUnitalRingHom.ext_iff.1 h)
+  RingEquiv.ext (NonUnitalRingHom.ext_iff .. |>.1 h)
 #align ring_equiv.to_non_unital_ring_hom_injective RingEquiv.toNonUnitalRingHom_injective
 
 theorem toNonUnitalRingHom_eq_coe (f : R ≃+* S) : f.toNonUnitalRingHom = ↑f :=
@@ -639,7 +636,7 @@ theorem coe_toNonUnitalRingHom (f : R ≃+* S) : ⇑(f : R →ₙ+* S) = f :=
 
 theorem coe_nonUnitalRingHom_inj_iff {R S : Type*} [NonUnitalNonAssocSemiring R]
     [NonUnitalNonAssocSemiring S] (f g : R ≃+* S) : f = g ↔ (f : R →ₙ+* S) = g :=
-  ⟨fun h => by rw [h], fun h => ext <| NonUnitalRingHom.ext_iff.mp h⟩
+  ⟨fun h => by rw [h], fun h => ext <| NonUnitalRingHom.ext_iff .. |>.mp h⟩
 #align ring_equiv.coe_non_unital_ring_hom_inj_iff RingEquiv.coe_nonUnitalRingHom_inj_iff
 
 @[simp]
@@ -692,7 +689,7 @@ def toRingHom (e : R ≃+* S) : R →+* S :=
 #align ring_equiv.to_ring_hom RingEquiv.toRingHom
 
 theorem toRingHom_injective : Function.Injective (toRingHom : R ≃+* S → R →+* S) := fun _ _ h =>
-  RingEquiv.ext (RingHom.ext_iff.1 h)
+  RingEquiv.ext (RingHom.ext_iff .. |>.1 h)
 #align ring_equiv.to_ring_hom_injective RingEquiv.toRingHom_injective
 
 @[simp] theorem toRingHom_eq_coe (f : R ≃+* S) : f.toRingHom = ↑f :=
@@ -706,7 +703,7 @@ theorem coe_toRingHom (f : R ≃+* S) : ⇑(f : R →+* S) = f :=
 
 theorem coe_ringHom_inj_iff {R S : Type*} [NonAssocSemiring R] [NonAssocSemiring S]
     (f g : R ≃+* S) : f = g ↔ (f : R →+* S) = g :=
-  ⟨fun h => by rw [h], fun h => ext <| RingHom.ext_iff.mp h⟩
+  ⟨fun h => by rw [h], fun h => ext <| RingHom.ext_iff .. |>.mp h⟩
 #align ring_equiv.coe_ring_hom_inj_iff RingEquiv.coe_ringHom_inj_iff
 
 /-- The two paths coercion can take to a `NonUnitalRingEquiv` are equivalent -/

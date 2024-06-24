@@ -94,7 +94,7 @@ theorem lift_spec {C} [Category C] (φ : V ⥤q C) : of ⋙q (lift φ).toPrefunc
   fapply Prefunctor.ext
   · rintro X
     rfl
-  · rintro _ X Y f
+  · rintro X Y f
     rcases φ with ⟨φo, φm⟩
     dsimp [lift, Quiver.Hom.toPath]
     simp only [Category.id_comp]

@@ -51,7 +51,7 @@ theorem ext_s {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ q₁.s = q₂.s := by
 #align semiquot.ext_s Semiquot.ext_s
 
 theorem ext {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ ∀ a, a ∈ q₁ ↔ a ∈ q₂ :=
-  ext_s.trans Set.ext_iff
+  ext_s.trans (Set.ext_iff ..)
 #align semiquot.ext Semiquot.ext
 
 theorem exists_mem (q : Semiquot α) : ∃ a, a ∈ q :=

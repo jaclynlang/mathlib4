@@ -71,7 +71,7 @@ def Pi.mulHom {γ : Type w} [∀ i, Mul (f i)] [Mul γ] (g : ∀ i, γ →ₙ* f
 theorem Pi.mulHom_injective {γ : Type w} [Nonempty I] [∀ i, Mul (f i)] [Mul γ] (g : ∀ i, γ →ₙ* f i)
     (hg : ∀ i, Function.Injective (g i)) : Function.Injective (Pi.mulHom g) := fun x y h =>
   let ⟨i⟩ := ‹Nonempty I›
-  hg i ((Function.funext_iff.mp h : _) i)
+  hg i (congr_fun h i)
 #align pi.mul_hom_injective Pi.mulHom_injective
 #align pi.add_hom_injective Pi.addHom_injective
 
@@ -317,7 +317,7 @@ theorem SemiconjBy.pi {x y z : ∀ i, f i} (h : ∀ i, SemiconjBy (x i) (y i) (z
 
 @[to_additive]
 theorem Pi.semiconjBy_iff {x y z : ∀ i, f i} :
-    SemiconjBy x y z ↔ ∀ i, SemiconjBy (x i) (y i) (z i) := Function.funext_iff
+    SemiconjBy x y z ↔ ∀ i, SemiconjBy (x i) (y i) (z i) := funext_iff ..
 
 @[to_additive]
 theorem Commute.pi {x y : ∀ i, f i} (h : ∀ i, Commute (x i) (y i)) : Commute x y := .pi h

@@ -78,7 +78,7 @@ theorem mk_one (h : (1 : α) ∈ Icc (0 : α) 1) : (⟨1, h⟩ : Icc (0 : α) 1)
 @[simp, norm_cast]
 theorem coe_eq_zero {x : Icc (0 : α) 1} : (x : α) = 0 ↔ x = 0 := by
   symm
-  exact Subtype.ext_iff
+  apply Subtype.ext_iff
 #align set.Icc.coe_eq_zero Set.Icc.coe_eq_zero
 
 theorem coe_ne_zero {x : Icc (0 : α) 1} : (x : α) ≠ 0 ↔ x ≠ 0 :=
@@ -88,7 +88,7 @@ theorem coe_ne_zero {x : Icc (0 : α) 1} : (x : α) ≠ 0 ↔ x ≠ 0 :=
 @[simp, norm_cast]
 theorem coe_eq_one {x : Icc (0 : α) 1} : (x : α) = 1 ↔ x = 1 := by
   symm
-  exact Subtype.ext_iff
+  apply Subtype.ext_iff
 #align set.Icc.coe_eq_one Set.Icc.coe_eq_one
 
 theorem coe_ne_one {x : Icc (0 : α) 1} : (x : α) ≠ 1 ↔ x ≠ 1 :=
@@ -200,7 +200,7 @@ theorem mk_zero [Nontrivial α] (h : (0 : α) ∈ Ico (0 : α) 1) : (⟨0, h⟩ 
 @[simp, norm_cast]
 theorem coe_eq_zero [Nontrivial α] {x : Ico (0 : α) 1} : (x : α) = 0 ↔ x = 0 := by
   symm
-  exact Subtype.ext_iff
+  apply Subtype.ext_iff
 #align set.Ico.coe_eq_zero Set.Ico.coe_eq_zero
 
 theorem coe_ne_zero [Nontrivial α] {x : Ico (0 : α) 1} : (x : α) ≠ 0 ↔ x ≠ 0 :=
@@ -265,7 +265,7 @@ theorem mk_one [Nontrivial α] (h : (1 : α) ∈ Ioc (0 : α) 1) : (⟨1, h⟩ :
 @[simp, norm_cast]
 theorem coe_eq_one [Nontrivial α] {x : Ioc (0 : α) 1} : (x : α) = 1 ↔ x = 1 := by
   symm
-  exact Subtype.ext_iff
+  apply Subtype.ext_iff
 #align set.Ioc.coe_eq_one Set.Ioc.coe_eq_one
 
 theorem coe_ne_one [Nontrivial α] {x : Ioc (0 : α) 1} : (x : α) ≠ 1 ↔ x ≠ 1 :=

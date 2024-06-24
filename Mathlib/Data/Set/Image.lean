@@ -598,7 +598,7 @@ theorem prod_quotient_preimage_eq_image [s : Setoid α] (g : Quotient s → β) 
     Set.ext fun ⟨a₁, a₂⟩ =>
       ⟨Quot.induction_on₂ a₁ a₂ fun a₁ a₂ h => ⟨(a₁, a₂), h, rfl⟩, fun ⟨⟨b₁, b₂⟩, h₁, h₂⟩ =>
         show (g a₁, g a₂) ∈ r from
-          have h₃ : ⟦b₁⟧ = a₁ ∧ ⟦b₂⟧ = a₂ := Prod.ext_iff.1 h₂
+          have h₃ : ⟦b₁⟧ = a₁ ∧ ⟦b₂⟧ = a₂ := (Prod.ext_iff ..).1 h₂
           h₃.1 ▸ h₃.2 ▸ h₁⟩
 #align set.prod_quotient_preimage_eq_image Set.prod_quotient_preimage_eq_image
 
@@ -737,7 +737,7 @@ theorem range_subset_iff : range f ⊆ s ↔ ∀ y, f y ∈ s :=
 
 theorem range_subset_range_iff_exists_comp {f : α → γ} {g : β → γ} :
     range f ⊆ range g ↔ ∃ h : α → β, f = g ∘ h := by
-  simp only [range_subset_iff, mem_range, Classical.skolem, Function.funext_iff, (· ∘ ·), eq_comm]
+  simp only [range_subset_iff, mem_range, Classical.skolem, funext_iff, (· ∘ ·), eq_comm]
 
 theorem range_eq_iff (f : α → β) (s : Set β) :
     range f = s ↔ (∀ a, f a ∈ s) ∧ ∀ b ∈ s, ∃ a, f a = b := by
@@ -1146,7 +1146,7 @@ theorem rangeSplitting_injective (f : α → β) : Injective (rangeSplitting f) 
 theorem rightInverse_rangeSplitting {f : α → β} (h : Injective f) :
     RightInverse (rangeFactorization f) (rangeSplitting f) :=
   (leftInverse_rangeSplitting f).rightInverse_of_injective fun _ _ hxy =>
-    h <| Subtype.ext_iff.1 hxy
+    h <| congr_arg Subtype.val hxy
 #align set.right_inverse_range_splitting Set.rightInverse_rangeSplitting
 
 theorem preimage_rangeSplitting {f : α → β} (hf : Injective f) :

@@ -366,7 +366,7 @@ theorem coe_pnatDen (x : ℚ) : (x.pnatDen : ℕ) = x.den :=
 #noalign rat.mk_pnat_pnat_denom_eq
 
 theorem pnatDen_eq_iff_den_eq {x : ℚ} {n : ℕ+} : x.pnatDen = n ↔ x.den = ↑n :=
-  Subtype.ext_iff
+  Subtype.ext_iff ..
 #align rat.pnat_denom_eq_iff_denom_eq Rat.pnatDen_eq_iff_den_eq
 
 @[simp]

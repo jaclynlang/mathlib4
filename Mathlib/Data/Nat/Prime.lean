@@ -837,7 +837,7 @@ theorem coe_nat_injective : Function.Injective (fun (a : Nat.Primes) ↦ (a : �
 #align nat.primes.coe_nat_injective Nat.Primes.coe_nat_injective
 
 theorem coe_nat_inj (p q : Nat.Primes) : (p : ℕ) = (q : ℕ) ↔ p = q :=
-  Subtype.ext_iff.symm
+  (Subtype.ext_iff ..).symm
 #align nat.primes.coe_nat_inj Nat.Primes.coe_nat_inj
 
 end Primes

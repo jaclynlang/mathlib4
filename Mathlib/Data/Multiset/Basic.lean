@@ -1653,7 +1653,7 @@ instance decidableDforallMultiset {p : ∀ a ∈ m, Prop} [_hp : ∀ (a) (h : a 
 /-- decidable equality for functions whose domain is bounded by multisets -/
 instance decidableEqPiMultiset {β : α → Type*} [h : ∀ a, DecidableEq (β a)] :
     DecidableEq (∀ a ∈ m, β a) := fun f g =>
-  decidable_of_iff (∀ (a) (h : a ∈ m), f a h = g a h) (by simp [Function.funext_iff])
+  decidable_of_iff (∀ (a) (h : a ∈ m), f a h = g a h) (by simp [funext_iff])
 #align multiset.decidable_eq_pi_multiset Multiset.decidableEqPiMultiset
 
 /-- If `p` is a decidable predicate,

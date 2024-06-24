@@ -235,14 +235,14 @@ theorem ext_iff {s₁ s₂ : Finset α} : s₁ = s₂ ↔ ∀ a, a ∈ s₁ ↔ 
   val_inj.symm.trans <| s₁.nodup.ext s₂.nodup
 #align finset.ext_iff Finset.ext_iff
 
-@[ext]
+@[ext (iff := false)]
 theorem ext {s₁ s₂ : Finset α} : (∀ a, a ∈ s₁ ↔ a ∈ s₂) → s₁ = s₂ :=
   ext_iff.2
 #align finset.ext Finset.ext
 
 @[simp, norm_cast]
 theorem coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂ :=
-  Set.ext_iff.trans ext_iff.symm
+  (Set.ext_iff ..).trans ext_iff.symm
 #align finset.coe_inj Finset.coe_inj
 
 theorem coe_injective {α} : Injective ((↑) : Finset α → Set α) := fun _s _t => coe_inj.1

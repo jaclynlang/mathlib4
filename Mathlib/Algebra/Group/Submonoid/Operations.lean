@@ -526,7 +526,7 @@ variable {S'}
 
 @[to_additive (attr := simp, norm_cast)]
 theorem coe_eq_one {x : S'} : (↑x : M₁) = 1 ↔ x = 1 :=
-  (Subtype.ext_iff.symm : (x : M₁) = (1 : S') ↔ x = 1)
+  (Subtype.ext_iff .. |>.symm : (x : M₁) = (1 : S') ↔ x = 1)
 #align one_mem_class.coe_eq_one OneMemClass.coe_eq_one
 #align zero_mem_class.coe_eq_zero ZeroMemClass.coe_eq_zero
 

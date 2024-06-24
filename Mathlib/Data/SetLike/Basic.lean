@@ -173,7 +173,7 @@ theorem ext (h : ∀ x, x ∈ p ↔ x ∈ q) : p = q :=
 #align set_like.ext SetLike.ext
 
 theorem ext_iff : p = q ↔ ∀ x, x ∈ p ↔ x ∈ q :=
-  coe_injective.eq_iff.symm.trans Set.ext_iff
+  coe_injective.eq_iff.symm.trans (Set.ext_iff ..)
 #align set_like.ext_iff SetLike.ext_iff
 
 @[simp]

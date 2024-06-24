@@ -76,7 +76,7 @@ theorem lift_comp : (of σ ⋙q lift σ φ τ h) = φ := by
     simp only [Prefunctor.comp_obj]
     apply Eq.symm
     exact h X
-  · rintro _ X Y f
+  · rintro X Y f
     simp only [Prefunctor.comp_map]
     apply eq_of_heq
     iterate 2 apply (cast_heq _ _).trans
@@ -91,7 +91,7 @@ theorem lift_unique (Φ : Push σ ⥤q W') (Φ₀ : Φ.obj = τ) (Φcomp : (of �
   · intro X
     simp only
     rw [Φ₀]
-  · rintro _ _ _ ⟨⟩
+  · rintro _ _ ⟨⟩
     subst_vars
     simp only [Prefunctor.comp_map, cast_eq]
     rfl

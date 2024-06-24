@@ -195,7 +195,7 @@ theorem center_units_subset [GroupWithZero M] : Set.center Mˣ ⊆ ((↑) : Mˣ 
     intro b
     obtain rfl | hb := eq_or_ne b 0
     · rw [zero_mul, mul_zero]
-    · exact Units.ext_iff.mp (ha.comm (Units.mk0 b hb)).symm
+    · exact congr_arg Units.val (ha.comm (Units.mk0 b hb)).symm
 #align set.center_units_subset Set.center_units_subset
 
 /-- In a group with zero, the center of the units is the preimage of the center. -/

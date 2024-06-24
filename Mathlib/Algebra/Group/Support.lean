@@ -72,7 +72,7 @@ theorem mulSupport_subset_iff' {f : α → M} {s : Set α} :
 @[to_additive]
 theorem mulSupport_eq_iff {f : α → M} {s : Set α} :
     mulSupport f = s ↔ (∀ x, x ∈ s → f x ≠ 1) ∧ ∀ x, x ∉ s → f x = 1 := by
-  simp (config := { contextual := true }) only [ext_iff, mem_mulSupport, ne_eq, iff_def,
+  simp (config := { contextual := true }) only [Set.ext_iff, mem_mulSupport, ne_eq, iff_def,
     not_imp_comm, and_comm, forall_and]
 #align function.mul_support_eq_iff Function.mulSupport_eq_iff
 #align function.support_eq_iff Function.support_eq_iff
@@ -82,7 +82,7 @@ theorem ext_iff_mulSupport {f g : α → M} :
     f = g ↔ f.mulSupport = g.mulSupport ∧ ∀ x ∈ f.mulSupport, f x = g x :=
   ⟨fun h ↦ h ▸ ⟨rfl, fun _ _ ↦ rfl⟩, fun ⟨h₁, h₂⟩ ↦ funext fun x ↦ by
     if hx : x ∈ f.mulSupport then exact h₂ x hx
-    else rw [nmem_mulSupport.1 hx, nmem_mulSupport.1 (mt (Set.ext_iff.1 h₁ x).2 hx)]⟩
+    else rw [nmem_mulSupport.1 hx, nmem_mulSupport.1 (mt (Set.ext_iff .. |>.1 h₁ x).2 hx)]⟩
 
 @[to_additive]
 theorem mulSupport_update_of_ne_one [DecidableEq α] (f : α → M) (x : α) {y : M} (hy : y ≠ 1) :

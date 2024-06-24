@@ -110,7 +110,7 @@ protected theorem coe_zero [Zero α] [Preorder α] : ((0 : { x : α // 0 ≤ x }
 @[simp]
 theorem mk_eq_zero [Zero α] [Preorder α] {x : α} (hx : 0 ≤ x) :
     (⟨x, hx⟩ : { x : α // 0 ≤ x }) = 0 ↔ x = 0 :=
-  Subtype.ext_iff
+  Subtype.ext_iff ..
 #align nonneg.mk_eq_zero Nonneg.mk_eq_zero
 
 instance add [AddZeroClass α] [Preorder α] [CovariantClass α α (· + ·) (· ≤ ·)] :
@@ -195,7 +195,7 @@ protected theorem coe_one [OrderedSemiring α] : ((1 : { x : α // 0 ≤ x }) : 
 @[simp]
 theorem mk_eq_one [OrderedSemiring α] {x : α} (hx : 0 ≤ x) :
     (⟨x, hx⟩ : { x : α // 0 ≤ x }) = 1 ↔ x = 1 :=
-  Subtype.ext_iff
+  Subtype.ext_iff ..
 #align nonneg.mk_eq_one Nonneg.mk_eq_one
 
 instance mul [OrderedSemiring α] : Mul { x : α // 0 ≤ x } where

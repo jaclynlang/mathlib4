@@ -994,11 +994,11 @@ theorem _root_.IsMin.Iic_eq (h : IsMin a) : Iic a = {a} :=
 #align is_min.Iic_eq IsMin.Iic_eq
 
 theorem Ici_injective : Injective (Ici : α → Set α) := fun _ _ =>
-  eq_of_forall_ge_iff ∘ Set.ext_iff.1
+  eq_of_forall_ge_iff ∘ (Set.ext_iff ..).1
 #align set.Ici_injective Set.Ici_injective
 
 theorem Iic_injective : Injective (Iic : α → Set α) := fun _ _ =>
-  eq_of_forall_le_iff ∘ Set.ext_iff.1
+  eq_of_forall_le_iff ∘ (Set.ext_iff ..).1
 #align set.Iic_injective Set.Iic_injective
 
 theorem Ici_inj : Ici a = Ici b ↔ a = b :=
@@ -1149,11 +1149,11 @@ theorem Iio_diff_Iio : Iio b \ Iio a = Ico a b := by
 #align set.Iio_diff_Iio Set.Iio_diff_Iio
 
 theorem Ioi_injective : Injective (Ioi : α → Set α) := fun _ _ =>
-  eq_of_forall_gt_iff ∘ Set.ext_iff.1
+  eq_of_forall_gt_iff ∘ (Set.ext_iff ..).1
 #align set.Ioi_injective Set.Ioi_injective
 
 theorem Iio_injective : Injective (Iio : α → Set α) := fun _ _ =>
-  eq_of_forall_lt_iff ∘ Set.ext_iff.1
+  eq_of_forall_lt_iff ∘ (Set.ext_iff ..).1
 #align set.Iio_injective Set.Iio_injective
 
 theorem Ioi_inj : Ioi a = Ioi b ↔ a = b :=

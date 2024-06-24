@@ -58,12 +58,12 @@ theorem restrict_apply (f : α → β) (s : Set α) (x : s) : s.restrict f x = f
 
 theorem restrict_eq_iff {f : ∀ a, π a} {s : Set α} {g : ∀ a : s, π a} :
     restrict s f = g ↔ ∀ (a) (ha : a ∈ s), f a = g ⟨a, ha⟩ :=
-  funext_iff.trans Subtype.forall
+  (funext_iff ..).trans Subtype.forall
 #align set.restrict_eq_iff Set.restrict_eq_iff
 
 theorem eq_restrict_iff {s : Set α} {f : ∀ a : s, π a} {g : ∀ a, π a} :
     f = restrict s g ↔ ∀ (a) (ha : a ∈ s), f ⟨a, ha⟩ = g a :=
-  funext_iff.trans Subtype.forall
+  (funext_iff ..).trans Subtype.forall
 #align set.eq_restrict_iff Set.eq_restrict_iff
 
 @[simp]
@@ -248,7 +248,7 @@ theorem EqOn.comp_left (h : s.EqOn f₁ f₂) : s.EqOn (g ∘ f₁) (g ∘ f₂)
 @[simp]
 theorem eqOn_range {ι : Sort*} {f : ι → α} {g₁ g₂ : α → β} :
     EqOn g₁ g₂ (range f) ↔ g₁ ∘ f = g₂ ∘ f :=
-  forall_mem_range.trans <| funext_iff.symm
+  forall_mem_range.trans <| (funext_iff ..).symm
 #align set.eq_on_range Set.eqOn_range
 
 alias ⟨EqOn.comp_eq, _⟩ := eqOn_range
@@ -1125,7 +1125,7 @@ lemma bijOn_of_subsingleton [Subsingleton α] (f : α → α) (s : Set α) : Bij
 #align set.bij_on_of_subsingleton Set.bijOn_of_subsingleton
 
 theorem BijOn.bijective (h : BijOn f s t) : Bijective (h.mapsTo.restrict f s t) :=
-  ⟨fun x y h' => Subtype.ext <| h.injOn x.2 y.2 <| Subtype.ext_iff.1 h', fun ⟨_, hy⟩ =>
+  ⟨fun x y h' => Subtype.ext <| h.injOn x.2 y.2 <| (Subtype.ext_iff ..).1 h', fun ⟨_, hy⟩ =>
     let ⟨x, hx, hxy⟩ := h.surjOn hy
     ⟨⟨x, hx⟩, Subtype.eq hxy⟩⟩
 #align set.bij_on.bijective Set.BijOn.bijective

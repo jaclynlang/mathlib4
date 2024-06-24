@@ -45,7 +45,7 @@ protected theorem image_eq_preimage {α β} (e : α ≃ β) (s : Set α) : e '' 
 @[simp 1001]
 theorem _root_.Set.mem_image_equiv {α β} {S : Set α} {f : α ≃ β} {x : β} :
     x ∈ f '' S ↔ f.symm x ∈ S :=
-  Set.ext_iff.mp (f.image_eq_preimage S) x
+  Set.ext_iff .. |>.mp (f.image_eq_preimage S) x
 #align set.mem_image_equiv Set.mem_image_equiv
 
 /-- Alias for `Equiv.image_eq_preimage` -/
@@ -616,7 +616,7 @@ noncomputable def ofInjective {α β} (f : α → β) (hf : Injective f) : α �
 
 theorem apply_ofInjective_symm {α β} {f : α → β} (hf : Injective f) (b : range f) :
     f ((ofInjective f hf).symm b) = b :=
-  Subtype.ext_iff.1 <| (ofInjective f hf).apply_symm_apply b
+  (Subtype.ext_iff ..).1 <| (ofInjective f hf).apply_symm_apply b
 #align equiv.apply_of_injective_symm Equiv.apply_ofInjective_symm
 
 @[simp]
@@ -719,7 +719,7 @@ theorem dite_comp_equiv_update {α : Type*} {β : Sort*} {γ : Sort*} {p : α �
   · rw [dif_pos h, Function.update_apply_equiv_apply, Equiv.symm_symm,
       Function.update_apply, Function.update_apply, dif_pos h]
     have h_coe : (⟨i, h⟩ : Subtype p) = e j ↔ i = e j :=
-      Subtype.ext_iff.trans (by rw [Subtype.coe_mk])
+      (Subtype.ext_iff ..).trans (by rw [Subtype.coe_mk])
     simp [h_coe]
   · have : i ≠ e j := by
       contrapose! h

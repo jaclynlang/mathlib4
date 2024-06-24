@@ -238,12 +238,12 @@ instance instGroup [Group G] [Group H] : Group (G × H) :=
 @[to_additive]
 instance [Mul G] [Mul H] [IsLeftCancelMul G] [IsLeftCancelMul H] : IsLeftCancelMul (G × H) where
   mul_left_cancel _ _ _ h :=
-      Prod.ext (mul_left_cancel (Prod.ext_iff.1 h).1) (mul_left_cancel (Prod.ext_iff.1 h).2)
+      Prod.ext (mul_left_cancel (congr_arg Prod.fst h)) (mul_left_cancel (congr_arg Prod.snd h))
 
 @[to_additive]
 instance [Mul G] [Mul H] [IsRightCancelMul G] [IsRightCancelMul H] : IsRightCancelMul (G × H) where
   mul_right_cancel _ _ _ h :=
-      Prod.ext (mul_right_cancel (Prod.ext_iff.1 h).1) (mul_right_cancel (Prod.ext_iff.1 h).2)
+      Prod.ext (mul_right_cancel (congr_arg Prod.fst h)) (mul_right_cancel (congr_arg Prod.snd h))
 
 @[to_additive]
 instance [Mul G] [Mul H] [IsCancelMul G] [IsCancelMul H] : IsCancelMul (G × H) where
@@ -294,7 +294,7 @@ theorem SemiconjBy.prod {x y z : M × N}
 
 @[to_additive]
 theorem Prod.semiconjBy_iff {x y z : M × N} :
-    SemiconjBy x y z ↔ SemiconjBy x.1 y.1 z.1 ∧ SemiconjBy x.2 y.2 z.2 := ext_iff
+    SemiconjBy x y z ↔ SemiconjBy x.1 y.1 z.1 ∧ SemiconjBy x.2 y.2 z.2 := Prod.ext_iff ..
 
 @[to_additive AddCommute.prod]
 theorem Commute.prod {x y : M × N} (hm : Commute x.1 y.1) (hn : Commute x.2 y.2) : Commute x y :=

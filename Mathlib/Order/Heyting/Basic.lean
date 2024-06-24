@@ -913,7 +913,7 @@ theorem toDual_compl (a : α) : toDual aᶜ = ￢toDual a :=
 #align to_dual_compl toDual_compl
 
 instance Prod.instHeytingAlgebra [HeytingAlgebra β] : HeytingAlgebra (α × β) where
-    himp_bot a := Prod.ext_iff.2 ⟨himp_bot a.1, himp_bot a.2⟩
+    himp_bot a := Prod.ext (himp_bot a.1) (himp_bot a.2)
 #align prod.heyting_algebra Prod.instHeytingAlgebra
 
 instance Pi.instHeytingAlgebra {α : ι → Type*} [∀ i, HeytingAlgebra (α i)] :
@@ -1099,7 +1099,7 @@ theorem toDual_sdiff (a b : α) : toDual (a \ b) = toDual b ⇨ toDual a :=
 
 instance Prod.instCoheytingAlgebra [CoheytingAlgebra β] : CoheytingAlgebra (α × β) where
   sdiff_le_iff _ _ _ := and_congr sdiff_le_iff sdiff_le_iff
-  top_sdiff a := Prod.ext_iff.2 ⟨top_sdiff' a.1, top_sdiff' a.2⟩
+  top_sdiff a := Prod.ext (top_sdiff' a.1) (top_sdiff' a.2)
 #align prod.coheyting_algebra Prod.instCoheytingAlgebra
 
 instance Pi.instCoheytingAlgebra {α : ι → Type*} [∀ i, CoheytingAlgebra (α i)] :

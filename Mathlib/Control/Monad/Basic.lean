@@ -38,7 +38,7 @@ functor, applicative, monad, simp
 
 set_option autoImplicit true
 
-attribute [ext] ReaderT.ext StateT.ext ExceptT.ext
+attribute [ext] ExceptT.ext
 
 @[monad_norm]
 theorem map_eq_bind_pure_comp (m : Type u → Type v) [Monad m] [LawfulMonad m]

@@ -79,7 +79,7 @@ protected theorem ext : ∀ {a1 a2 : { x // p x }}, (a1 : α) = (a2 : α) → a1
 theorem heq_iff_coe_eq (h : ∀ x, p x ↔ q x) {a1 : { x // p x }} {a2 : { x // q x }} :
     HEq a1 a2 ↔ (a1 : α) = (a2 : α) :=
   Eq.rec (motive := fun (pp: (α → Prop)) _ ↦ ∀ a2' : {x // pp x}, HEq a1 a2' ↔ (a1 : α) = (a2' : α))
-         (fun _ ↦ heq_iff_eq.trans Subtype.ext_iff) (funext <| fun x ↦ propext (h x)) a2
+         (fun _ ↦ heq_iff_eq.trans (Subtype.ext_iff ..)) (funext <| fun x ↦ propext (h x)) a2
 #align subtype.heq_iff_coe_eq Subtype.heq_iff_coe_eq
 
 lemma heq_iff_coe_heq {α β : Sort _} {p : α → Prop} {q : β → Prop} {a : {x // p x}}
@@ -94,7 +94,7 @@ theorem ext_val {a1 a2 : { x // p x }} : a1.1 = a2.1 → a1 = a2 :=
 #align subtype.ext_val Subtype.ext_val
 
 theorem ext_iff_val {a1 a2 : { x // p x }} : a1 = a2 ↔ a1.1 = a2.1 :=
-  Subtype.ext_iff
+  Subtype.ext_iff ..
 #align subtype.ext_iff_val Subtype.ext_iff_val
 
 @[simp]
@@ -111,7 +111,7 @@ theorem coe_mk (a h) : (@mk α p a h : α) = a :=
 -- built-in reduction doesn't always work
 -- @[simp, nolint simp_nf]
 theorem mk_eq_mk {a h a' h'} : @mk α p a h = @mk α p a' h' ↔ a = a' :=
-  Subtype.ext_iff
+  Subtype.ext_iff ..
 #align subtype.mk_eq_mk Subtype.mk_eq_mk
 
 theorem coe_eq_of_eq_mk {a : { a // p a }} {b : α} (h : ↑a = b) : a = ⟨b, h ▸ a.2⟩ :=

@@ -37,7 +37,8 @@ namespace Semiconj
 variable {f fab : α → β} {fbc : β → γ} {ga ga' : α → α} {gb gb' : β → β} {gc gc' : γ → γ}
 
 /-- Definition of `Function.Semiconj` in terms of functional equality. -/
-lemma _root_.Function.semiconj_iff_comp_eq : Semiconj f ga gb ↔ f ∘ ga = gb ∘ f := funext_iff.symm
+lemma _root_.Function.semiconj_iff_comp_eq : Semiconj f ga gb ↔ f ∘ ga = gb ∘ f :=
+  (funext_iff _ _).symm
 
 protected alias ⟨comp_eq, _⟩ := semiconj_iff_comp_eq
 #align function.semiconj.comp_eq Function.Semiconj.comp_eq

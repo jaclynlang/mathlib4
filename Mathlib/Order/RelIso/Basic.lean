@@ -133,9 +133,6 @@ theorem coe_fn_injective : Injective fun (f : r →r s) => (f : α → β) :=
 theorem ext ⦃f g : r →r s⦄ (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext f g h
 #align rel_hom.ext RelHom.ext
-
-theorem ext_iff {f g : r →r s} : f = g ↔ ∀ x, f x = g x :=
-  DFunLike.ext_iff
 #align rel_hom.ext_iff RelHom.ext_iff
 
 /-- Identity map is a relation homomorphism. -/
@@ -279,9 +276,6 @@ theorem coe_fn_injective : Injective fun f : r ↪r s => (f : α → β) :=
 theorem ext ⦃f g : r ↪r s⦄ (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext _ _ h
 #align rel_embedding.ext RelEmbedding.ext
-
-theorem ext_iff {f g : r ↪r s} : f = g ↔ ∀ x, f x = g x :=
-  DFunLike.ext_iff
 #align rel_embedding.ext_iff RelEmbedding.ext_iff
 
 /-- Identity map is a relation embedding. -/
@@ -680,9 +674,6 @@ theorem coe_fn_injective : Injective fun f : r ≃r s => (f : α → β) :=
 theorem ext ⦃f g : r ≃r s⦄ (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext f g h
 #align rel_iso.ext RelIso.ext
-
-theorem ext_iff {f g : r ≃r s} : f = g ↔ ∀ x, f x = g x :=
-  DFunLike.ext_iff
 #align rel_iso.ext_iff RelIso.ext_iff
 
 /-- Inverse map of a relation isomorphism is a relation isomorphism. -/

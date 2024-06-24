@@ -250,7 +250,7 @@ lemma iterate_cancel (hf : Injective f) (ha : f^[m] a = f^[n] a) : f^[m - n] a =
 #align function.iterate_cancel Function.iterate_cancel
 
 theorem involutive_iff_iter_2_eq_id {α} {f : α → α} : Involutive f ↔ f^[2] = id :=
-  funext_iff.symm
+  (funext_iff ..).symm
 #align function.involutive_iff_iter_2_eq_id Function.involutive_iff_iter_2_eq_id
 
 end Function

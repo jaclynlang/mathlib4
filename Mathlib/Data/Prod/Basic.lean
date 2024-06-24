@@ -307,7 +307,7 @@ namespace Function
 variable {f : α → γ} {g : β → δ} {f₁ : α → β} {g₁ : γ → δ} {f₂ : β → α} {g₂ : δ → γ}
 
 theorem Injective.prodMap (hf : Injective f) (hg : Injective g) : Injective (map f g) :=
-  fun _ _ h ↦ ext (hf (Prod.ext_iff.1 h).1) (hg <| (Prod.ext_iff.1 h).2)
+  fun _ _ h ↦ ext (hf (congr_arg Prod.fst h)) (hg (congr_arg Prod.snd h))
 #align function.injective.prod_map Function.Injective.prodMap
 
 theorem Surjective.prodMap (hf : Surjective f) (hg : Surjective g) : Surjective (map f g) :=

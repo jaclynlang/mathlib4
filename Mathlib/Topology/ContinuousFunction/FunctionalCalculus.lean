@@ -407,6 +407,32 @@ lemma cfc_const_zero : cfc (fun _ : R ↦ 0) a = 0 :=
 
 variable {R}
 
+lemma spectrum_algebraMap_subset (r : R) : spectrum R (algebraMap R A r) ⊆ {r} := by
+  rw [← cfc_const r 0 (cfc_predicate_zero R),
+    cfc_map_spectrum (fun _ ↦ r) 0 (cfc_predicate_zero R)]
+  rintro - ⟨x, -, rfl⟩
+  simp
+
+@[simp]
+lemma cfc_algebraMap (r : R) (f : R → R) :
+    cfc f (algebraMap R A r) = algebraMap R A (f r) := by
+  have h₁ : ContinuousOn f (spectrum R (algebraMap R A r)) :=
+    continuousOn_singleton _ _ |>.mono <| spectrum_algebraMap_subset r
+  rw [cfc_apply f (algebraMap R A r) (cfc_predicate_algebraMap r),
+    ← AlgHomClass.commutes (cfcHom (p := p) (cfc_predicate_algebraMap r)) (f r)]
+  congr
+  ext ⟨x, hx⟩
+  apply spectrum_algebraMap_subset r at hx
+  simp_all
+
+@[simp]
+lemma cfc_apply_zero {f : R → R} : cfc f (0 : A) = algebraMap R A (f 0) := by
+  simpa using cfc_algebraMap (A := A) 0 f
+
+@[simp]
+lemma cfc_apply_one {f : R → R} : cfc f (1 : A) = algebraMap R A (f 1) := by
+  simpa using cfc_algebraMap (A := A) 1 f
+
 lemma cfc_mul (f g : R → R) (a : A) (hf : ContinuousOn f (spectrum R a) := by cfc_cont_tac)
     (hg : ContinuousOn g (spectrum R a) := by cfc_cont_tac) :
     cfc (fun x ↦ f x * g x) a = cfc f a * cfc g a := by

@@ -310,6 +310,19 @@ lemma cfcₙ_const_zero : cfcₙ (fun _ : R ↦ 0) a = 0 := cfcₙ_zero R a
 
 variable {R}
 
+lemma quasispectrum_zero_eq : σₙ R (0 : A) = {0} := by
+  refine Set.eq_singleton_iff_unique_mem.mpr ⟨quasispectrum.zero_mem R 0, fun x hx ↦ ?_⟩
+  rw [← cfcₙ_zero R (0 : A),
+    cfcₙ_map_quasispectrum _ _ (by cfc_cont_tac) (by cfc_zero_tac) (cfcₙ_predicate_zero R)] at hx
+  simp_all
+
+lemma cfcₙ_apply_zero (f : R → R) : cfcₙ f (0 : A) = 0 := by
+  by_cases hf0 : f 0 = 0
+  · nth_rw 2 [← cfcₙ_zero R 0]
+    apply cfcₙ_congr
+    simpa [quasispectrum_zero_eq]
+  · exact cfcₙ_apply_of_not_map_zero _ hf0
+
 lemma cfcₙ_mul : cfcₙ (fun x ↦ f x * g x) a = cfcₙ f a * cfcₙ g a := by
   by_cases ha : p a
   · rw [cfcₙ_apply f a, cfcₙ_apply g a, ← map_mul, cfcₙ_apply _ a]

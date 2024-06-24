@@ -76,17 +76,12 @@ theorem lift_comp : (of σ ⋙q lift σ φ τ h) = φ := by
     simp only [Prefunctor.comp_obj]
     apply Eq.symm
     exact h X
-  · rintro X Y f
+  · rintro _ X Y f
     simp only [Prefunctor.comp_map]
     apply eq_of_heq
     iterate 2 apply (cast_heq _ _).trans
-    apply HEq.symm
-    apply (eqRec_heq _ _).trans
-    have : ∀ {α γ} {β : α → γ → Sort _} {a a'} (p : a = a') g (b : β a g), HEq (p ▸ b) b := by
-      intros
-      subst_vars
-      rfl
-    apply this
+    simp only [heq_eqRec_iff_heq]
+    rfl
 #align quiver.push.lift_comp Quiver.Push.lift_comp
 
 theorem lift_unique (Φ : Push σ ⥤q W') (Φ₀ : Φ.obj = τ) (Φcomp : (of σ ⋙q Φ) = φ) :
@@ -96,7 +91,7 @@ theorem lift_unique (Φ : Push σ ⥤q W') (Φ₀ : Φ.obj = τ) (Φcomp : (of �
   · intro X
     simp only
     rw [Φ₀]
-  · rintro _ _ ⟨⟩
+  · rintro _ _ _ ⟨⟩
     subst_vars
     simp only [Prefunctor.comp_map, cast_eq]
     rfl

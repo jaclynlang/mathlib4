@@ -75,7 +75,7 @@ lemma mk_map {V W : Type*} [Quiver V] [Quiver W] {obj : V → W} {map} {X Y : V}
 @[ext]
 theorem ext {V : Type u} [Quiver.{v₁} V] {W : Type u₂} [Quiver.{v₂} W] {F G : Prefunctor V W}
     (h_obj : ∀ X, F.obj X = G.obj X)
-    (h_map : ∀ (X Y : V) (f : X ⟶ Y),
+    (h_map : ∀ (h_obj : ∀ X, F.obj X = G.obj X) (X Y : V) (f : X ⟶ Y),
       F.map f = Eq.recOn (h_obj Y).symm (Eq.recOn (h_obj X).symm (G.map f))) : F = G := by
   cases' F with F_obj _
   cases' G with G_obj _
@@ -84,7 +84,7 @@ theorem ext {V : Type u} [Quiver.{v₁} V] {W : Type u₂} [Quiver.{v₂} W] {F 
     apply h_obj
   congr
   funext X Y f
-  simpa using h_map X Y f
+  simpa using h_map h_obj X Y f
 #align prefunctor.ext Prefunctor.ext
 
 /-- The identity morphism between quivers. -/

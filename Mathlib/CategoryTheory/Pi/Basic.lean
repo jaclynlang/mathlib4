@@ -224,7 +224,7 @@ section EqToHom
 
 @[simp]
 theorem eqToHom_proj {x x' : ∀ i, C i} (h : x = x') (i : I) :
-    (eqToHom h : x ⟶ x') i = eqToHom (Function.funext_iff.mp h i) := by
+    (eqToHom h : x ⟶ x') i = eqToHom (congr_fun h i) := by
   subst h
   rfl
 #align category_theory.functor.eq_to_hom_proj CategoryTheory.Functor.eqToHom_proj

@@ -615,7 +615,7 @@ instance (priority := 100) CommMonoid.isStarNormal [CommMonoid R] [StarMul R] {x
 namespace Pi
 variable {ι : Type*} {α : ι → Type*} [∀ i, Star (α i)] {f : ∀ i, α i}
 
-protected lemma isSelfAdjoint : IsSelfAdjoint f ↔ ∀ i, IsSelfAdjoint (f i) := funext_iff
+protected lemma isSelfAdjoint : IsSelfAdjoint f ↔ ∀ i, IsSelfAdjoint (f i) := funext_iff ..
 
 alias ⟨_root_.IsSelfAdjoint.apply, _⟩ := Pi.isSelfAdjoint
 

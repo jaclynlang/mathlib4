@@ -185,7 +185,7 @@ def vertexSubgroup {c : C} (hc : c ∈ S.objs) : Subgroup (c ⟶ c) where
 
 instance : SetLike (Subgroupoid C) (Σ c d : C, c ⟶ d) where
   coe := toSet
-  coe_injective' := fun ⟨S, _, _⟩ ⟨T, _, _⟩ h => by ext c d f; apply Set.ext_iff.1 h ⟨c, d, f⟩
+  coe_injective' := fun ⟨S, _, _⟩ ⟨T, _, _⟩ h => by ext c d f; exact (Set.ext_iff ..).1 h ⟨c, d, f⟩
 
 theorem mem_iff (S : Subgroupoid C) (F : Σ c d, c ⟶ d) : F ∈ S ↔ F.2.2 ∈ S.arrows F.1 F.2.1 :=
   Iff.rfl
@@ -699,7 +699,7 @@ theorem full_mono {D E : Set C} (h : D ≤ E) : full D ≤ full E := by
 -- Porting note: using `.1` instead of `↑`
 theorem full_arrow_eq_iff {c d : (full D).objs} {f g : c ⟶ d} :
     f = g ↔ (f.1 : c.val ⟶ d.val) = g.1 :=
-  Subtype.ext_iff
+  Subtype.ext_iff ..
 #align category_theory.subgroupoid.full_arrow_eq_iff CategoryTheory.Subgroupoid.full_arrow_eq_iff
 
 end Full

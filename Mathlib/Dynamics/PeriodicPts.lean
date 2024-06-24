@@ -599,7 +599,7 @@ theorem iterate_prod_map (f : α → α) (g : β → β) (n : ℕ) :
 @[simp]
 theorem isFixedPt_prod_map (x : α × β) :
     IsFixedPt (Prod.map f g) x ↔ IsFixedPt f x.1 ∧ IsFixedPt g x.2 :=
-  Prod.ext_iff
+  Prod.ext_iff ..
 #align function.is_fixed_pt_prod_map Function.isFixedPt_prod_map
 
 @[simp]

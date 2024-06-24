@@ -511,23 +511,15 @@ instance : Mono S.rightHomologyι := by
   dsimp only [rightHomologyι]
   infer_instance
 
-lemma rightHomology_ext_iff {A : C} (f₁ f₂ : A ⟶ S.rightHomology) :
-    f₁ = f₂ ↔ f₁ ≫ S.rightHomologyι = f₂ ≫ S.rightHomologyι := by
-  rw [cancel_mono]
-
 @[ext]
 lemma rightHomology_ext {A : C} (f₁ f₂ : A ⟶ S.rightHomology)
     (h : f₁ ≫ S.rightHomologyι = f₂ ≫ S.rightHomologyι) : f₁ = f₂ := by
-  simpa only [rightHomology_ext_iff]
-
-lemma opcycles_ext_iff {A : C} (f₁ f₂ : S.opcycles ⟶ A) :
-    f₁ = f₂ ↔ S.pOpcycles ≫ f₁ = S.pOpcycles ≫ f₂ := by
-  rw [cancel_epi]
+  simpa only [cancel_mono] using h
 
 @[ext]
 lemma opcycles_ext {A : C} (f₁ f₂ : S.opcycles ⟶ A)
     (h : S.pOpcycles ≫ f₁ = S.pOpcycles ≫ f₂) : f₁ = f₂ := by
-  simpa only [opcycles_ext_iff]
+  simpa only [cancel_epi] using h
 
 lemma isIso_pOpcycles (hf : S.f = 0) : IsIso S.pOpcycles :=
   RightHomologyData.isIso_p _ hf

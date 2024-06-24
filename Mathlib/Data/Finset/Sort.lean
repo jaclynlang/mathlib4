@@ -230,7 +230,7 @@ theorem orderEmbOfFin_unique {s : Finset α} {k : ℕ} (h : s.card = k) {f : Fin
 the increasing bijection `orderEmbOfFin s h`. -/
 theorem orderEmbOfFin_unique' {s : Finset α} {k : ℕ} (h : s.card = k) {f : Fin k ↪o α}
     (hfs : ∀ x, f x ∈ s) : f = s.orderEmbOfFin h :=
-  RelEmbedding.ext <| Function.funext_iff.1 <| orderEmbOfFin_unique h hfs f.strictMono
+  RelEmbedding.ext <| (funext_iff ..).1 <| orderEmbOfFin_unique h hfs f.strictMono
 #align finset.order_emb_of_fin_unique' Finset.orderEmbOfFin_unique'
 
 /-- Two parametrizations `orderEmbOfFin` of the same set take the same value on `i` and `j` if
@@ -241,7 +241,7 @@ theorem orderEmbOfFin_eq_orderEmbOfFin_iff {k l : ℕ} {s : Finset α} {i : Fin 
     {h : s.card = k} {h' : s.card = l} :
     s.orderEmbOfFin h i = s.orderEmbOfFin h' j ↔ (i : ℕ) = (j : ℕ) := by
   substs k l
-  exact (s.orderEmbOfFin rfl).eq_iff_eq.trans Fin.ext_iff
+  exact (s.orderEmbOfFin rfl).eq_iff_eq.trans (Fin.ext_iff ..)
 #align finset.order_emb_of_fin_eq_order_emb_of_fin_iff Finset.orderEmbOfFin_eq_orderEmbOfFin_iff
 
 /-- Given a finset `s` of size at least `k` in a linear order `α`, the map `orderEmbOfCardLe`

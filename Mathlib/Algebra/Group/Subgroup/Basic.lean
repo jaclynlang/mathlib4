@@ -1641,7 +1641,7 @@ theorem subgroupOf_map_subtype (H K : Subgroup G) : (H.subgroupOf K).map K.subty
 
 @[to_additive (attr := simp)]
 theorem bot_subgroupOf : (⊥ : Subgroup G).subgroupOf H = ⊥ :=
-  Eq.symm (Subgroup.ext fun _g => Subtype.ext_iff)
+  Eq.symm (Subgroup.ext fun _g => Subtype.ext_iff ..)
 #align subgroup.bot_subgroup_of Subgroup.bot_subgroupOf
 #align add_subgroup.bot_add_subgroup_of AddSubgroup.bot_addSubgroupOf
 
@@ -2237,7 +2237,7 @@ instance map_isCommutative (f : G →* G') [H.IsCommutative] : (H.map f).IsCommu
   ⟨⟨by
       rintro ⟨-, a, ha, rfl⟩ ⟨-, b, hb, rfl⟩
       rw [Subtype.ext_iff, coe_mul, coe_mul, Subtype.coe_mk, Subtype.coe_mk, ← map_mul, ← map_mul]
-      exact congr_arg f (Subtype.ext_iff.mp (mul_comm (⟨a, ha⟩ : H) ⟨b, hb⟩))⟩⟩
+      exact congr_arg f (Subtype.ext_iff .. |>.mp (mul_comm (⟨a, ha⟩ : H) ⟨b, hb⟩))⟩⟩
 #align subgroup.map_is_commutative Subgroup.map_isCommutative
 #align add_subgroup.map_is_commutative AddSubgroup.map_isCommutative
 
@@ -2595,7 +2595,7 @@ theorem _root_.Subgroup.subtype_range (H : Subgroup G) : H.subtype.range = H := 
 @[to_additive (attr := simp)]
 theorem _root_.Subgroup.inclusion_range {H K : Subgroup G} (h_le : H ≤ K) :
     (inclusion h_le).range = H.subgroupOf K :=
-  Subgroup.ext fun g => Set.ext_iff.mp (Set.range_inclusion h_le) g
+  Subgroup.ext fun g => Set.ext_iff .. |>.mp (Set.range_inclusion h_le) g
 #align subgroup.inclusion_range Subgroup.inclusion_range
 #align add_subgroup.inclusion_range AddSubgroup.inclusion_range
 
@@ -2650,7 +2650,7 @@ theorem ofLeftInverse_symm_apply {f : G →* N} {g : N →* G} (h : Function.Lef
 domain."]
 noncomputable def ofInjective {f : G →* N} (hf : Function.Injective f) : G ≃* f.range :=
   MulEquiv.ofBijective (f.codRestrict f.range fun x => ⟨x, rfl⟩)
-    ⟨fun x y h => hf (Subtype.ext_iff.mp h), by
+    ⟨fun x y h => hf (Subtype.ext_iff .. |>.mp h), by
       rintro ⟨x, y, rfl⟩
       exact ⟨y, rfl⟩⟩
 #align monoid_hom.of_injective MonoidHom.ofInjective
@@ -2666,7 +2666,7 @@ theorem ofInjective_apply {f : G →* N} (hf : Function.Injective f) {x : G} :
 @[to_additive (attr := simp)]
 theorem apply_ofInjective_symm {f : G →* N} (hf : Function.Injective f) (x : f.range) :
     f ((ofInjective hf).symm x) = x :=
-  Subtype.ext_iff.1 <| (ofInjective hf).apply_symm_apply x
+  Subtype.ext_iff .. |>.1 <| (ofInjective hf).apply_symm_apply x
 
 section Ker
 
@@ -2740,7 +2740,7 @@ theorem ker_restrict (f : G →* N) : (f.restrict K).ker = f.ker.subgroupOf K :=
 @[to_additive (attr := simp)]
 theorem ker_codRestrict {S} [SetLike S N] [SubmonoidClass S N] (f : G →* N) (s : S)
     (h : ∀ x, f x ∈ s) : (f.codRestrict s h).ker = f.ker :=
-  SetLike.ext fun _x => Subtype.ext_iff
+  SetLike.ext fun _x => Subtype.ext_iff ..
 #align monoid_hom.ker_cod_restrict MonoidHom.ker_codRestrict
 #align add_monoid_hom.ker_cod_restrict AddMonoidHom.ker_codRestrict
 

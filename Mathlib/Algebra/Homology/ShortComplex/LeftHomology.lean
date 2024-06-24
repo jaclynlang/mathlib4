@@ -419,23 +419,15 @@ instance : Epi S.leftHomologyπ := by
   dsimp only [leftHomologyπ]
   infer_instance
 
-lemma leftHomology_ext_iff {A : C} (f₁ f₂ : S.leftHomology ⟶ A) :
-    f₁ = f₂ ↔ S.leftHomologyπ ≫ f₁ = S.leftHomologyπ ≫ f₂ := by
-  rw [cancel_epi]
-
 @[ext]
 lemma leftHomology_ext {A : C} (f₁ f₂ : S.leftHomology ⟶ A)
     (h : S.leftHomologyπ ≫ f₁ = S.leftHomologyπ ≫ f₂) : f₁ = f₂ := by
-  simpa only [leftHomology_ext_iff] using h
-
-lemma cycles_ext_iff {A : C} (f₁ f₂ : A ⟶ S.cycles) :
-    f₁ = f₂ ↔ f₁ ≫ S.iCycles = f₂ ≫ S.iCycles := by
-  rw [cancel_mono]
+  simpa only [cancel_epi] using h
 
 @[ext]
 lemma cycles_ext {A : C} (f₁ f₂ : A ⟶ S.cycles) (h : f₁ ≫ S.iCycles = f₂ ≫ S.iCycles) :
     f₁ = f₂ := by
-  simpa only [cycles_ext_iff] using h
+  simpa only [cancel_mono] using h
 
 lemma isIso_iCycles (hg : S.g = 0) : IsIso S.iCycles :=
   LeftHomologyData.isIso_i _ hg

@@ -356,7 +356,7 @@ namespace Fintype
 instance decidablePiFintype {α} {β : α → Type*} [∀ a, DecidableEq (β a)] [Fintype α] :
     DecidableEq (∀ a, β a) := fun f g =>
   decidable_of_iff (∀ a ∈ @Fintype.elems α _, f a = g a)
-    (by simp [Function.funext_iff, Fintype.complete])
+    (by simp [funext_iff, Fintype.complete])
 #align fintype.decidable_pi_fintype Fintype.decidablePiFintype
 
 instance decidableForallFintype {p : α → Prop} [DecidablePred p] [Fintype α] :

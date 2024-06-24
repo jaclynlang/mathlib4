@@ -118,12 +118,12 @@ infixr:67 " ::ₛ " => cons
 
 @[simp]
 theorem cons_inj_right (a : α) (s s' : Sym α n) : a ::ₛ s = a ::ₛ s' ↔ s = s' :=
-  Subtype.ext_iff.trans <| (Multiset.cons_inj_right _).trans Subtype.ext_iff.symm
+  (Subtype.ext_iff ..).trans <| (Multiset.cons_inj_right _).trans (Subtype.ext_iff ..).symm
 #align sym.cons_inj_right Sym.cons_inj_right
 
 @[simp]
 theorem cons_inj_left (a a' : α) (s : Sym α n) : a ::ₛ s = a' ::ₛ s ↔ a = a' :=
-  Subtype.ext_iff.trans <| Multiset.cons_inj_left _
+  (Subtype.ext_iff ..).trans <| Multiset.cons_inj_left _
 #align sym.cons_inj_left Sym.cons_inj_left
 
 theorem cons_swap (a b : α) (s : Sym α n) : a ::ₛ b ::ₛ s = b ::ₛ a ::ₛ s :=
@@ -324,7 +324,7 @@ theorem exists_eq_cons_of_succ (s : Sym α n.succ) : ∃ (a : α) (s' : Sym α n
 #align sym.exists_eq_cons_of_succ Sym.exists_eq_cons_of_succ
 
 theorem eq_replicate {a : α} {n : ℕ} {s : Sym α n} : s = replicate n a ↔ ∀ b ∈ s, b = a :=
-  Subtype.ext_iff.trans <| Multiset.eq_replicate.trans <| and_iff_right s.prop
+  (Subtype.ext_iff ..).trans <| Multiset.eq_replicate.trans <| and_iff_right s.prop
 #align sym.eq_replicate Sym.eq_replicate
 
 theorem eq_replicate_of_subsingleton [Subsingleton α] (a : α) {n : ℕ} (s : Sym α n) :
@@ -357,7 +357,7 @@ instance (n : ℕ) [Unique α] : Unique (Sym α n) :=
   Unique.mk' _
 
 theorem replicate_right_inj {a b : α} {n : ℕ} (h : n ≠ 0) : replicate n a = replicate n b ↔ a = b :=
-  Subtype.ext_iff.trans (Multiset.replicate_right_inj h)
+  (Subtype.ext_iff ..).trans (Multiset.replicate_right_inj h)
 #align sym.replicate_right_inj Sym.replicate_right_inj
 
 theorem replicate_right_injective {n : ℕ} (h : n ≠ 0) :
@@ -514,12 +514,12 @@ def append (s : Sym α n) (s' : Sym α n') : Sym α (n + n') :=
 
 @[simp]
 theorem append_inj_right (s : Sym α n) {t t' : Sym α n'} : s.append t = s.append t' ↔ t = t' :=
-  Subtype.ext_iff.trans <| (add_right_inj _).trans Subtype.ext_iff.symm
+  (Subtype.ext_iff ..).trans <| (add_right_inj _).trans (Subtype.ext_iff ..).symm
 #align sym.append_inj_right Sym.append_inj_right
 
 @[simp]
 theorem append_inj_left {s s' : Sym α n} (t : Sym α n') : s.append t = s'.append t ↔ s = s' :=
-  Subtype.ext_iff.trans <| (add_left_inj _).trans Subtype.ext_iff.symm
+  (Subtype.ext_iff ..).trans <| (add_left_inj _).trans (Subtype.ext_iff ..).symm
 #align sym.append_inj_left Sym.append_inj_left
 
 theorem append_comm (s : Sym α n') (s' : Sym α n') :

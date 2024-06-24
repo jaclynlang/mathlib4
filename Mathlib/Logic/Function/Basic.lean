@@ -65,7 +65,7 @@ lemma hfunext {α α' : Sort u} {β : α → Sort v} {β' : α' → Sort v} {f :
   exact eq_of_heq (this a)
 #align function.hfunext Function.hfunext
 
-#align function.funext_iff Function.funext_iff
+#align function.funext_iff funext_iff
 
 theorem ne_iff {β : α → Sort*} {f₁ f₂ : ∀ a, β a} : f₁ ≠ f₂ ↔ ∃ a, f₁ a ≠ f₂ a :=
   funext_iff.not.trans not_forall
@@ -1020,7 +1020,7 @@ lemma forall_existsUnique_iff {r : α → β → Prop} :
 if and only if it is `(f · = ·)` for some function `f`. -/
 lemma forall_existsUnique_iff' {r : α → β → Prop} :
     (∀ a, ∃! b, r a b) ↔ ∃ f : α → β, r = (f · = ·) := by
-  simp [forall_existsUnique_iff, Function.funext_iff]
+  simp [forall_existsUnique_iff, funext_iff]
 
 /-- A symmetric relation `r : α → α → Prop` is "function-like"
 (for each `a` there exists a unique `b` such that `r a b`)

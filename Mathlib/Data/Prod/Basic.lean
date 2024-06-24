@@ -122,9 +122,6 @@ lemma mk_inj_left {a : α} {b₁ b₂ : β} : (a, b₁) = (a, b₂) ↔ b₁ = b
 
 lemma mk_inj_right {a₁ a₂ : α} {b : β} : (a₁, b) = (a₂, b) ↔ a₁ = a₂ := (mk.inj_right _).eq_iff
 #align prod.mk_inj_right Prod.mk_inj_right
-
-theorem ext_iff {p q : α × β} : p = q ↔ p.1 = q.1 ∧ p.2 = q.2 := by
-  rw [mk.inj_iff]
 #align prod.ext_iff Prod.ext_iff
 
 #align prod.ext Prod.ext
@@ -310,7 +307,7 @@ namespace Function
 variable {f : α → γ} {g : β → δ} {f₁ : α → β} {g₁ : γ → δ} {f₂ : β → α} {g₂ : δ → γ}
 
 theorem Injective.prodMap (hf : Injective f) (hg : Injective g) : Injective (map f g) :=
-  fun _ _ h ↦ ext (hf (ext_iff.1 h).1) (hg <| (ext_iff.1 h).2)
+  fun _ _ h ↦ ext (hf (Prod.ext_iff.1 h).1) (hg <| (Prod.ext_iff.1 h).2)
 #align function.injective.prod_map Function.Injective.prodMap
 
 theorem Surjective.prodMap (hf : Surjective f) (hg : Surjective g) : Surjective (map f g) :=

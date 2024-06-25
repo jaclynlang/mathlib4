@@ -120,8 +120,18 @@ theorem Multiset.mem_of_mem_toEnumFinset {p : α × ℕ} (h : p ∈ m.toEnumFins
 
 namespace Multiset
 
-@[simp] lemma filter_toEnumFinset_fst_eq (m : Multiset α) (a : α) :
+@[simp] lemma toEnumFinset_filter_eq (m : Multiset α) (a : α) :
     m.toEnumFinset.filter (·.1 = a) = {a} ×ˢ Finset.range (m.count a) := by aesop
+#align multiset.to_enum_finset_filter_eq Multiset.toEnumFinset_filter_eq
+
+@[simp] lemma map_toEnumFinset_fst (m : Multiset α) : m.toEnumFinset.val.map Prod.fst = m := by
+  ext a; simp [count_map, ← Finset.filter_val, eq_comm (a := a)]
+#align multiset.map_to_enum_finset_fst Multiset.map_toEnumFinset_fst
+
+@[simp] lemma image_toEnumFinset_fst (m : Multiset α) :
+    m.toEnumFinset.image Prod.fst = m.toFinset := by 
+  rw [Finset.image, Multiset.map_toEnumFinset_fst]
+#align multiset.image_to_enum_finset_fst Multiset.image_toEnumFinset_fst
 
 @[simp] lemma map_fst_toEnumFinset (m : Multiset α) : map Prod.fst m.toEnumFinset.1 = m := by
   ext a; simp [count_map, ← Finset.filter_val, eq_comm (a := a)]
@@ -208,30 +218,6 @@ theorem Multiset.map_univ_coeEmbedding (m : Multiset α) :
     exists_prop, exists_eq_right_right, exists_eq_right, Multiset.mem_toEnumFinset, iff_self_iff,
     true_and_iff]
 #align multiset.map_univ_coe_embedding Multiset.map_univ_coeEmbedding
-
-theorem Multiset.toEnumFinset_filter_eq (m : Multiset α) (x : α) :
-    (m.toEnumFinset.filter fun p ↦ x = p.1) =
-      (Finset.range (m.count x)).map ⟨Prod.mk x, Prod.mk.inj_left x⟩ := by
-  ext ⟨y, i⟩
-  simp only [eq_comm, Finset.mem_filter, Multiset.mem_toEnumFinset, Finset.mem_map,
-    Finset.mem_range, Function.Embedding.coeFn_mk, Prod.mk.inj_iff, exists_prop,
-    exists_eq_right_right', and_congr_left_iff]
-  rintro rfl
-  rfl
-#align multiset.to_enum_finset_filter_eq Multiset.toEnumFinset_filter_eq
-
-@[simp]
-theorem Multiset.map_toEnumFinset_fst (m : Multiset α) : m.toEnumFinset.val.map Prod.fst = m := by
-  ext x
-  simp only [Multiset.count_map, ← Finset.filter_val, Multiset.toEnumFinset_filter_eq,
-    Finset.map_val, Finset.range_val, Multiset.card_map, Multiset.card_range]
-#align multiset.map_to_enum_finset_fst Multiset.map_toEnumFinset_fst
-
-@[simp]
-theorem Multiset.image_toEnumFinset_fst (m : Multiset α) :
-    m.toEnumFinset.image Prod.fst = m.toFinset := by
-  rw [Finset.image, Multiset.map_toEnumFinset_fst]
-#align multiset.image_to_enum_finset_fst Multiset.image_toEnumFinset_fst
 
 @[simp]
 theorem Multiset.map_univ_coe (m : Multiset α) :

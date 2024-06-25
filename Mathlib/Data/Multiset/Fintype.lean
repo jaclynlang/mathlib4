@@ -133,9 +133,6 @@ namespace Multiset
   rw [Finset.image, Multiset.map_toEnumFinset_fst]
 #align multiset.image_to_enum_finset_fst Multiset.image_toEnumFinset_fst
 
-@[simp] lemma map_fst_toEnumFinset (m : Multiset α) : map Prod.fst m.toEnumFinset.1 = m := by
-  ext a; simp [count_map, ← Finset.filter_val, eq_comm (a := a)]
-
 @[simp] lemma map_fst_le_of_subset_toEnumFinset {s : Finset (α × ℕ)} (hsm : s ⊆ m.toEnumFinset) :
     s.1.map Prod.fst ≤ m := by
   simp_rw [le_iff_count, count_map]

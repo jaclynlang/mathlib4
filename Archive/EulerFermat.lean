@@ -79,7 +79,7 @@ lemma ord_compl_of_pow (m n p : ℕ) (hp : p.Prime) (hn : n = p ^ m) : ord_compl
   exact hp
 
 /-- `n` is a power of `p` only if the odd part of `p ^ m` is 1. -/
-lemma ord_pow_of_compl (n p: ℕ) (hnop : ord_compl[p] n = 1) : ∃ m : ℕ, n = p ^ m := by
+lemma ord_pow_of_compl (n p : ℕ) (hnop : ord_compl[p] n = 1) : ∃ m : ℕ, n = p ^ m := by
   have h : p ^ n.factorization p * (n / p ^ n.factorization p) = n :=
     ord_proj_mul_ord_compl_eq_self n p
   use n.factorization p

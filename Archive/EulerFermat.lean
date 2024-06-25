@@ -9,14 +9,14 @@ import Mathlib
 # a^n+1 is prime only if n is a power of two
 
 The fact that primes of the form `a^n+1` must have `n` a power of two was stated and
-the proof outlined in three sentences by Euler in the year 1738 [E026]. A proof can be
-found in Hardy & Wright, An introduction to the theory of numbers (5th ed., 1979),
+the proof outlined in three sentences by Euler in the year 1738 [E026]. A different
+proof can be found in Hardy & Wright, An introduction to the theory of numbers (5th ed., 1979),
 p.15, Theorem 17. In the proof below we followed Euler's thoughts.
 -/
 
 open Nat
 
-lemma simplify1 (a m' : ℕ) (ha : a > 0) :
+lemma simplify1 (a m' : ℕ) (ha : 0 < a) :
     a ^ (2 * m' + 1) + 1 + (a + 1) * (a ^ (2 * m' + 2) - a ^ (2 * m' + 1)) =
     a ^ (2 * m' + 3) + 1 :=
   have h₁ (a b c d : ℕ) : a + b + c + d - a = b + c + d := by omega
@@ -48,23 +48,23 @@ lemma simplify1 (a m' : ℕ) (ha : a > 0) :
       exact Nat.add_comm 1 (a ^ (2 * m' + 3))
 
 /-- "$a^{2m+1}+1$ can be divided by $a+1$" [Euler, E026]. Proof by induction. -/
-theorem H1 (a m : ℕ) (ha : a > 0) : (a + 1) ∣ a ^ (2 * m + 1) + 1 := by
+theorem H1 (a m : ℕ) (ha : 0 < a) : (a + 1) ∣ a ^ (2 * m + 1) + 1 := by
   have h₃ (a m' : ℕ) : a ^ (2 * m' + 2 + 1) = a ^ (2 * m' + 3) := by ring_nf
   have hdvd (a m' : ℕ) : (a + 1) ∣ (a + 1) * (a ^ (2 * m' + 2) - a ^ (2 * m' + 1)) :=
     dvd_mul_right (a + 1) (a ^ (2 * m' + 2) - a ^ (2 * m' + 1))
   induction m with
   | zero =>
-    exact Dvd.intro_left (Nat.pow a 0) rfl
+    simp only [mul_zero, zero_add, pow_one, dvd_refl]
   | succ m' ih =>
     rw [Nat.mul_succ, h₃ a m', ← simplify1 a m' ha]
     exact dvd_add ih (hdvd a m')
 
 /-- "$a^p+1$ divides $a^{p(2m+1)}+1$" [Euler, E026]. Substitute $a$ for $a^p$ in the above. -/
-lemma H2 (a m p: ℕ) (ha : a > 0) : (a ^ p + 1) ∣ a ^ (p * (2 * m + 1)) + 1 := by
+lemma H2 (a m p: ℕ) (ha : 0 < a) : (a ^ p + 1) ∣ a ^ (p * (2 * m + 1)) + 1 := by
   rw [pow_mul a p (2 * m + 1)]
   exact H1 (a ^ p) m (pos_pow_of_pos p ha)
 
-/-- The odd part of `n > 0` is either 1, or is `∈ [1, n)`. -/
+/-- `ord_compl[p] n` is either 1, or is `∈ (1, n]`. -/
 lemma ord_compl_eq_or_lt (n p : ℕ) (hn : 0 < n) :
     ord_compl[p] n = 1 ∨ (1 < ord_compl[p] n ∧ n ≥ ord_compl[p] n) := by
   have h (n m : ℕ) (hn1 : n ≤ m) (hn2 : 1 ≤ n) : n = 1 ∨ (1 < n ∧ m ≥ n) := by omega
@@ -72,13 +72,13 @@ lemma ord_compl_eq_or_lt (n p : ℕ) (hn : 0 < n) :
   · apply ord_compl_le n
   · apply ord_compl_pos p (not_eq_zero_of_lt hn)
 
-/-- With respect to prime `p`, the odd part of `p ^ m` is 1 only if `n` is a power of `p`. -/
+/-- `ord_compl[p] n` is 1 only if `n` is a power of `p`. -/
 lemma ord_compl_of_pow (m n p : ℕ) (hp : p.Prime) (hn : n = p ^ m) : ord_compl[p] n = 1 := by
   rw [hn, Prime.factorization_pow, Finsupp.single_eq_same]
   simp only [Prime.pos hp, ofNat_pos, pow_pos, Nat.div_self]
   exact hp
 
-/-- `n` is a power of `p` only if the odd part of `p ^ m` is 1. -/
+/-- `n` is a power of `p` only if `ord_compl[p] n` is 1. -/
 lemma ord_pow_of_compl (n p : ℕ) (hnop : ord_compl[p] n = 1) : ∃ m : ℕ, n = p ^ m := by
   have h : p ^ n.factorization p * (n / p ^ n.factorization p) = n :=
     ord_proj_mul_ord_compl_eq_self n p
@@ -115,8 +115,7 @@ theorem H3 (a n : ℕ) (ha : 1 < a) (hn : 1 < n)
   have h₁ : ord_compl[2] n = 1 ∨ (1 < ord_compl[2] n ∧ n ≥ ord_compl[2] n) :=
     ord_compl_eq_or_lt n 2 (Nat.zero_lt_of_lt hn)
   /- If we can disprove the second proposition, then the first remains true in `h₁`,
-     and `h₁` can simply be applied. For this logical argument we need the
-     `true_or_false` lemma, which we apply to `h₁`. -/
+     and `h₁` can simply be applied. -/
   have true_or_false (A B : Prop) (hB : ¬ B) (hab : A ∨ B) : A := by simp_all only [or_false]
   apply true_or_false at h₁
   /- This opens the hypothesis `hB` as goal, which is the negation of the
@@ -128,7 +127,7 @@ theorem H3 (a n : ℕ) (ha : 1 < a) (hn : 1 < n)
     rcases hB' with ⟨h₂, _⟩
     /- This extracts h₂ from hB'. It states that the odd part of `n` is greater 1.
        This will be essential for the following arguments. -/
-    apply Iff.mpr (Nat.not_prime_iff_exists_dvd_ne (by exact Prime.two_le hP))
+    apply Iff.mpr (Nat.not_prime_iff_exists_dvd_ne (Prime.two_le hP))
     /- This sets up the contradiction with the hypothesis `hP` that `a^n+1` be prime.
        From assuming `a^n+1` is not prime follows that we need to prove a proper
        divisor exists, creating the subgoals that it divides `a^n+1`, that it is

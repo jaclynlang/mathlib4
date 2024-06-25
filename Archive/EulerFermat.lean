@@ -125,7 +125,7 @@ theorem H3 (a n : ℕ) (ha : 1 < a) (hn : 1 < n)
   /- In this part we prove that setting `n` as of form `m₁ * (2 * m₂ + 1)`, `m₁, m₂ > 0`
      (the current goal) leads to a contradiction. -/
   · by_contra hB'
-    rcases hB' with ⟨ h₂, _ ⟩
+    rcases hB' with ⟨h₂, _⟩
     /- This extracts h₂ from hB'. It states that the odd part of `n` is greater 1.
        This will be essential for the following arguments. -/
     apply Iff.mpr (Nat.not_prime_iff_exists_dvd_ne (by exact Prime.two_le hP))

@@ -129,7 +129,7 @@ namespace Multiset
 #align multiset.map_to_enum_finset_fst Multiset.map_toEnumFinset_fst
 
 @[simp] lemma image_toEnumFinset_fst (m : Multiset α) :
-    m.toEnumFinset.image Prod.fst = m.toFinset := by 
+    m.toEnumFinset.image Prod.fst = m.toFinset := by
   rw [Finset.image, Multiset.map_toEnumFinset_fst]
 #align multiset.image_to_enum_finset_fst Multiset.image_toEnumFinset_fst
 

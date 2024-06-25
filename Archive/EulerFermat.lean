@@ -73,7 +73,7 @@ lemma ord_compl_eq_or_lt (n p : ℕ) (hn : 0 < n) :
   · apply ord_compl_pos p (not_eq_zero_of_lt hn)
 
 /-- With respect to prime `p`, the odd part of `p ^ m` is 1 only if `n` is a power of `p`. -/
-lemma ord_compl_of_pow (m n p: ℕ) (hp : p.Prime) (hn : n = p ^ m) : ord_compl[p] n = 1 := by
+lemma ord_compl_of_pow (m n p : ℕ) (hp : p.Prime) (hn : n = p ^ m) : ord_compl[p] n = 1 := by
   rw [hn, Prime.factorization_pow, Finsupp.single_eq_same]
   simp only [Prime.pos hp, ofNat_pos, pow_pos, Nat.div_self]
   exact hp

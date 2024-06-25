@@ -66,7 +66,7 @@ For a **pivot** `p : Fin (n + 1)`,
   dependent functions, in which case `f : ∀ i : Fin n, α (p.succAbove i)` and `a : α p`. This is a
   special case of `Fin.succAboveCases`.
 * `Fin.removeNth`: Turn a tuple `f : Fin (n + 1) → α` into a tuple `Fin.removeNth p f : Fin n → α`
-  by forgetting the start. In general, tuples can be dependent functions,
+  by forgetting the `p`-th value. In general, tuples can be dependent functions,
   in which case `Fin.removeNth f : ∀ i : Fin n, α (succAbove p i)`.
 
 `p = 0` means we add at the start. `p = last n` means we add at the end.

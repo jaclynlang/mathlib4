@@ -19,8 +19,8 @@ open Nat
 lemma simplify1 (a m' : ℕ) (ha : a > 0) :
     a ^ (2 * m' + 1) + 1 + (a + 1) * (a ^ (2 * m' + 2) - a ^ (2 * m' + 1)) =
     a ^ (2 * m' + 3) + 1 :=
-  have h₁ (a b c d : ℕ): a + b + c + d - a = b + c + d := by omega
-  have h₂ (a b : ℕ) (h : b ≤ a): 1 + a - b + b = 1 + a := by omega
+  have h₁ (a b c d : ℕ) : a + b + c + d - a = b + c + d := by omega
+  have h₂ (a b : ℕ) (h : b ≤ a) : 1 + a - b + b = 1 + a := by omega
   calc
     a ^ (2 * m' + 1) + 1 + (a + 1) * (a ^ (2 * m' + 2) - a ^ (2 * m' + 1)) =
       a ^ (2 * m' + 1) + 1 + a * (a ^ (2 * m' + 2) - a ^ (2 * m' + 1)) +

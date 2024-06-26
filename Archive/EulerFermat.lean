@@ -33,7 +33,7 @@ theorem pow_of_pow_add_prime (a n : ℕ) (ha : 1 < a) (hn : 1 < n) (hP : Nat.Pri
   have key := hm.nat_add_one_dvd_pow_add_one (a ^ 2 ^ k)
   have not_prime : ¬ ((a ^ 2 ^ k) ^ m + 1).Prime := by
     apply (Nat.not_prime_iff_exists_dvd_ne _).mpr
-    . use a ^ 2 ^ k + 1
+    · use a ^ 2 ^ k + 1
       have h₁ : a ^ 2 ^ k + 1 ≠ 1 := by
         rw [ne_eq, add_left_eq_self, pow_eq_zero_iff]
         . exact not_eq_zero_of_lt ha

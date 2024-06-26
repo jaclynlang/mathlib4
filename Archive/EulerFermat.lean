@@ -14,7 +14,7 @@ theorem Odd.nat_add_one_dvd_pow_add_one (x : ℕ) {n : ℕ} (hn : Odd n) : x + 1
 /-- For `a > 1`, `a ^ b = a` iff `b = 1`. -/
 theorem Nat.pow_eq_self_iff (a b : ℕ) (ha : 1 < a) : b = 1 ↔ a ^ b = a := by
   constructor
-  . intro h
+  · intro h
     rw [h]
     exact Nat.pow_one a
   . intro h

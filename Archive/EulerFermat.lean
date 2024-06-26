@@ -17,7 +17,7 @@ theorem Nat.pow_eq_self_iff (a b : ℕ) (ha : 1 < a) : b = 1 ↔ a ^ b = a := by
   · intro h
     rw [h]
     exact Nat.pow_one a
-  . intro h
+  · intro h
     nth_rewrite 2 [Eq.symm (Nat.pow_one a)] at h
     rw [pow_right_inj (zero_lt_of_lt ha) (Ne.symm (ne_of_lt ha))] at h
     exact h

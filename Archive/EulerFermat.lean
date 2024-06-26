@@ -42,8 +42,8 @@ theorem pow_of_pow_add_prime (a n : ℕ) (ha : 1 < a) (hn : 1 < n) (hP : Nat.Pri
         apply Ne.symm
         rw [ne_eq, add_left_inj]
         rw [← Nat.pow_eq_self_iff (a := a ^ 2 ^ k) (b := m)]
-        . exact hm'
-        . simp only [ne_eq, pow_eq_zero_iff', OfNat.ofNat_ne_zero, false_and,
+        · exact hm'
+        · simp only [ne_eq, pow_eq_zero_iff', OfNat.ofNat_ne_zero, false_and,
             not_false_eq_true, Nat.one_lt_pow_iff, ha]
       exact ⟨key, h₁, h₂⟩
     . simp only [reduceLeDiff]
